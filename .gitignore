@@ -1,0 +1,51 @@
+# Visual Studio specific ignores
+.vs/
+*.vcxproj
+*.vcxproj.user
+*.sln
+*.pdb
+*.obj
+*.idb
+*.ipch
+*.log
+*.tlog
+*.lastbuildstate
+*.sdf
+*.opensdf
+*.unsuccessfulbuild
+Build/
+Debug/
+Release/
+x64/
+[Bb]in/
+*.suo
+*.user
+
+# Rider IDE specific
+.idea/
+
+# CLion specific ignores
+cmake-build-debug/
+cmake-build-release/
+cmake-build-*/
+*.idea/
+*.iml
+.idea/
+*.ipr
+*.iws
+
+# CMake specific ignores
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+build/
+Testing/
+CTestTestfile.cmake
+*.cmake
+
+# System-specific ignores
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
