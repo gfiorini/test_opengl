@@ -1,6 +1,4 @@
 ﻿# CMakeList.txt : CMake project for test_opengl, include source and define
-# project specific logic here.
-#
 cmake_minimum_required (VERSION 3.8)
 
 # Enable Hot Reload for MSVC compilers if supported.
@@ -11,11 +9,16 @@ endif()
 
 project ("test_opengl")
 
-# Add source to this project's executable.
-add_executable (test_opengl "test_opengl.cpp" )
+add_subdirectory(dependencies/glew)
+add_subdirectory(dependencies/glfw)
+
+add_executable (test_opengl "src/test_opengl.cpp" )
+
+target_include_directories(test_opengl PUBLIC dependencies/glfw/include)
+target_include_directories(test_opengl PUBLIC dependencies/glew/include)
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET test_opengl PROPERTY CXX_STANDARD 20)
 endif()
 
-# TODO: Add tests and install targets if needed.
+

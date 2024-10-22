@@ -2,6 +2,7 @@
 //
 
 #include "test_opengl.h"
+#include "GL/glew.h"
 
 using namespace std;
 
