@@ -9,20 +9,6 @@ endif()
 
 project ("test_opengl")
 
-
-#if(WIN32)
-#
-# elseif(UNIX)
-#message(STATUS "Compiling on Unix-like system (Linux, macOS)")
-#find_package(OpenGL COMPONENTS OpenGL REQUIRED)
-#find_package(GLEW REQUIRED)
-#find_package(glfw3 3.3 REQUIRED)
-#
-#add_definitions(-DGLEW_STATIC)
-#add_executable(OpenGL-test ${SOURCE_FILES})
-#target_link_libraries(OpenGL-test OpenGL::GL GLEW::GLEW glfw)
-#endif()
-
 add_subdirectory(dependencies/glew)
 add_subdirectory(dependencies/glfw)
 
@@ -33,7 +19,7 @@ target_include_directories(test_opengl PUBLIC dependencies/glfw/include)
 target_include_directories(test_opengl PUBLIC dependencies/glew/include)
 
 target_link_libraries(test_opengl  glfw
-	libglew_static  )
+	libglew_static)
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
     set_property(TARGET test_opengl PROPERTY CXX_STANDARD 20)
