@@ -12,10 +12,14 @@ project ("test_opengl")
 add_subdirectory(dependencies/glew)
 add_subdirectory(dependencies/glfw)
 
+add_definitions(-DGLEW_STATIC)
 add_executable (test_opengl "src/test_opengl.cpp" )
 
 target_include_directories(test_opengl PUBLIC dependencies/glfw/include)
 target_include_directories(test_opengl PUBLIC dependencies/glew/include)
+
+target_link_libraries(test_opengl  glfw
+	libglew_static  )
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET test_opengl PROPERTY CXX_STANDARD 20)
