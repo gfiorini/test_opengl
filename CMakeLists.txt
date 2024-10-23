@@ -13,8 +13,10 @@ add_subdirectory(dependencies/glew)
 add_subdirectory(dependencies/glfw)
 
 add_definitions(-DGLEW_STATIC)
-add_executable (test_opengl "src/test_opengl.cpp" )
+add_executable (test_opengl "src/test_opengl.cpp"
+)
 
+target_include_directories(test_opengl PUBLIC dependencies/glfw/deps)
 target_include_directories(test_opengl PUBLIC dependencies/glfw/include)
 target_include_directories(test_opengl PUBLIC dependencies/glew/include)
 
