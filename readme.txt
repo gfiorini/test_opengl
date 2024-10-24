@@ -1,5 +1,9 @@
 Build instructions:
 
+after cloning project must be initialized git submodules:
+
+git submodule update --init --recursive
+
 the project use cmake as build system
 
 On Linux you must have installed openGL development libs:
@@ -14,6 +18,9 @@ and to build glfw (see https://www.glfw.org/docs/latest/compile.html) you must h
 On Windows build with your preferred IDE/toolchain and you're done (tested with Visual Studio and CLion)
 
 ----------------------------------------------------------------------------------------------------------------
+
+
+
 
 submodule glew and glfw first initalization was made with:
 
