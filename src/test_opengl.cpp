@@ -120,7 +120,7 @@ int main(void)
 
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(1920*2, 1080*2, "Hello World", NULL, NULL);
+    window = glfwCreateWindow(1024, 1024, "Hello World", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -143,9 +143,12 @@ int main(void)
 
     // vertix with pos and color
     float vertices[] = {
-        -0.5f, -0.5f, 1, 0, 0,
-        0.5f, -0.5f,  0, 1, 0,
-        0.0f,  0.5f,  0, 0, 1
+        0, 0, 1, 0, 0,
+        0.5f, 0,  0, 1, 0,
+        0.5f,  0.5f,  0, 0, 1,
+        0, 0, 1, 0, 0,
+        0.5f,  0.5f, 0, 0, 1,
+        0, 0.5f, 0, 1, 0,
     };
 
     constexpr GLsizei n = 1;
@@ -192,7 +195,7 @@ int main(void)
             glUseProgram(program3);
         }
 
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
