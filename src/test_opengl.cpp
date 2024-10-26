@@ -1,6 +1,8 @@
 ﻿#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
+#include <fstream>
+#include <sstream>
 
 std::string srcSampleVertexShader = R"(
     #version 330 core
@@ -42,6 +44,11 @@ std::string srcSampleFragmentShader3 = R"(
         color = vColor;
     }
 )";
+
+struct ShaderProgramSource {
+    std::string vertexSource;
+    std::string fragmentSource;
+};
 
 static unsigned int compileShader(unsigned int type, const std::string& source) {
     unsigned int shader = glCreateShader(type);
@@ -88,6 +95,55 @@ static unsigned int createProgram(const std::string& srcVertexShader, const std:
     glDeleteShader(fragmentShader);
 
     return shaderProgram;
+}
+
+#define DEBUG  // Comment this out to disable debug messages
+
+// Macro for debug messages
+#ifdef DEBUG
+#define DEBUG_PRINT(x) std::cout << "DEBUG: " << x << std::endl
+#else
+#define DEBUG_PRINT(x)
+#endif
+
+ShaderProgramSource readShader(const std::string& filepath) {
+
+    enum ShaderType {
+        NONE = -1,
+        VERTEX = 0,
+        FRAGMENT = 1
+    };
+
+    std::stringstream shaders[2];
+
+    std::ifstream file(filepath);
+    if (!file.is_open()) {
+        std::cerr << "Could not open shader file" << std::endl;
+    }
+
+    ShaderType shaderType = NONE;
+    std::string line;
+    while (std::getline(file, line)) {
+        if (line.find("#vertex shader") != std::string::npos) {
+            shaderType = VERTEX;
+        } else if (line.find("#fragment shader") != std::string::npos) {
+            shaderType = FRAGMENT;
+        } else {
+            if (shaderType != NONE) {
+                shaders[shaderType] << line << std::endl;
+            }
+        }
+    }
+
+    ShaderProgramSource result;
+    result.vertexSource = shaders[0].str();
+    result.fragmentSource = shaders[1].str();
+
+    DEBUG_PRINT("VERTEX SHADER SOURCE" << std::endl << result.vertexSource << std::endl);
+    DEBUG_PRINT("FRAGMENT SHADER SOURCE" << std::endl << result.fragmentSource << std::endl);
+
+    file.close();
+    return result;
 }
 
 int main(void)
@@ -150,6 +206,8 @@ int main(void)
 
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)(2 * sizeof(float)));
     glEnableVertexAttribArray(1);
+
+    readShader("res/shaders/shader1.shader");
 
     unsigned int program1 = createProgram(srcSampleVertexShader, srcSampleFragmentShader);
     unsigned int program2 = createProgram(srcSampleVertexShader, srcSampleFragmentShader2);
