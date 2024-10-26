@@ -143,26 +143,33 @@ int main(void)
 
     // vertix with pos and color
     float vertices[] = {
-        0, 0, 1, 0, 0,
-        0.5f, 0,  0, 1, 0,
-        0.5f,  0.5f,  0, 0, 1,
-        0, 0, 1, 0, 0,
-        0.5f,  0.5f, 0, 0, 1,
-        0, 0.5f, 0, 1, 0,
+        0, 0, 1, 0, 0, // 0
+        0.5f, 0,  0, 1, 0, // 1
+        0.5f,  0.5f,  0, 0, 1, // 2
+        0, 0.5f, 0, 1, 0 // 3
     };
 
-    constexpr GLsizei n = 1;
-    GLuint vertexBuffer;
+    unsigned int vertexIndices[] {
+        0, 1, 2, // first triangle
+        2, 3, 0  // second triangle
+    };
+
+    unsigned int VBO;
+    unsigned int IBO;
 
     glEnable(GL_BLEND); // Enable blending
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     // create buffer to store vertexes
-    glGenBuffers(n, &vertexBuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+    glGenBuffers(1, &VBO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
-    // copy vertexes in buffer (in graphic card)
+    glGenBuffers(1, &IBO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+
+    // copy vertexes and index
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(vertexIndices), vertexIndices, GL_STATIC_DRAW);
 
     // size = num element in index (position = 2 elements, uv = 2 elements)
     // stride = size in bytes of vertex 2*2 float (position) + 2*2 float (uv coords)
@@ -195,7 +202,8 @@ int main(void)
             glUseProgram(program3);
         }
 
-        glDrawArrays(GL_TRIANGLES, 0, 6);
+        // glDrawW
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
