@@ -1,28 +1,17 @@
 ﻿#include <GL/glew.h>
 #include <GLFW/glfw3.h>
-//#include "linmath.h"
 #include <iostream>
-
-// typedef struct Vertex
-// {
-//     vec2 pos;
-//     vec3 col;
-// } Vertex;
-//
-// static const Vertex vertices[3] =
-// {
-//     { { -0.6f, -0.4f }, { 1.f, 0.f, 0.f } },
-//     { {  0.6f, -0.4f }, { 0.f, 1.f, 0.f } },
-//     { {   0.f,  0.6f }, { 0.f, 0.f, 1.f } }
-// };
 
 std::string srcSampleVertexShader = R"(
     #version 330 core
     layout(location = 0) in vec2 position;
+    layout(location = 1) in vec3 color;
+
+    out vec3 vColor;
 
     void main() {
         gl_Position = vec4(position, 0, 1.0);
-
+        vColor = color;
     }
 )";
 
@@ -35,8 +24,27 @@ std::string srcSampleFragmentShader = R"(
     }
 )";
 
-static unsigned int compileShader(unsigned int SHADER_TYPE, const std::string& source) {
-    unsigned int shader = glCreateShader(SHADER_TYPE);
+std::string srcSampleFragmentShader2 = R"(
+    #version 330 core
+    out vec4 color;
+
+    void main() {
+        color = vec4(1, 0, 0, 1);
+    }
+)";
+
+std::string srcSampleFragmentShader3 = R"(
+    #version 330 core
+    in vec4 vColor;
+    out vec4 color;
+
+    void main() {
+        color = vColor;
+    }
+)";
+
+static unsigned int compileShader(unsigned int type, const std::string& source) {
+    unsigned int shader = glCreateShader(type);
     const char* src = source.c_str();
     glShaderSource(shader, 1, &src, nullptr);
     glCompileShader(shader);
@@ -45,12 +53,14 @@ static unsigned int compileShader(unsigned int SHADER_TYPE, const std::string& s
     if (!success) {
         GLint length;
         glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &length);
-        std::cerr << "Shader " << SHADER_TYPE << " Compile Error, log length: " << length << " chars" << std::endl;
+        std::cerr << "Shader " << (type == GL_VERTEX_SHADER ? "Vertex" : "Fragment") <<
+            " Compile Error, log length: " << length << " chars" << std::endl;
 
         char infoLog[length];
         glGetShaderInfoLog(shader, length, nullptr, infoLog);
-        std::cerr << "Shader " << SHADER_TYPE << " Compile Error: " << infoLog << std::endl;
-
+        std::cerr << "Shader " << (type == GL_VERTEX_SHADER ? "Vertex" : "Fragment") << " Compile Error: " << infoLog << std::endl;
+        glDeleteShader(shader);
+        return 0;
     }
     return shader;
 }
@@ -78,10 +88,6 @@ static unsigned int createProgram(const std::string& srcVertexShader, const std:
     glDeleteShader(fragmentShader);
 
     return shaderProgram;
-}
-
-static unsigned int createSampleProgram() {
-    return createProgram(srcSampleVertexShader, srcSampleFragmentShader);
 }
 
 int main(void)
@@ -116,11 +122,11 @@ int main(void)
     fprintf(stdout, "OpenGl Version / Driver version: %s\n", glGetString(GL_VERSION));
 
 
-    // vertix with pos and uvmap
+    // vertix with pos and color
     float vertices[] = {
-        -0.5f, -0.5f, 0, 0,
-        0.5f, -0.5f, 0, 0,
-        0.0f,  0.5f, 0, 0,
+        -0.5f, -0.5f, 1, 0, 0,
+        0.5f, -0.5f,  0, 1, 0,
+        0.0f,  0.5f,  0, 0, 1
     };
 
     constexpr GLsizei n = 1;
@@ -139,22 +145,36 @@ int main(void)
     // size = num element in index (position = 2 elements, uv = 2 elements)
     // stride = size in bytes of vertex 2*2 float (position) + 2*2 float (uv coords)
     // pointer = offest size, position = 0, uvmap = 8 = 2 * 4bytes (1 float = 32bit = 4 bytes)
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void *)0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)0);
     glEnableVertexAttribArray(0);
 
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)(2 * sizeof(float)));
+    glEnableVertexAttribArray(1);
 
-    unsigned int sampleProgram = createSampleProgram();
-    glUseProgram(sampleProgram);
+    unsigned int program1 = createProgram(srcSampleVertexShader, srcSampleFragmentShader);
+    unsigned int program2 = createProgram(srcSampleVertexShader, srcSampleFragmentShader2);
+    unsigned int program3 = createProgram(srcSampleVertexShader, srcSampleFragmentShader3);
+
+    glUseProgram(program1);
 
     while (!glfwWindowShouldClose(window))
     {
         glClear(GL_COLOR_BUFFER_BIT);
+
+        if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) {
+            glUseProgram(program1);
+        } else if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) {
+            glUseProgram(program2);
+        } else if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS) {
+            glUseProgram(program3);
+        }
 
         glDrawArrays(GL_TRIANGLES, 0, 3);
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
 
+    glDeleteProgram(program1);
     glfwDestroyWindow(window);
 
     glfwTerminate();
