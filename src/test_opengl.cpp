@@ -4,46 +4,7 @@
 #include <fstream>
 #include <sstream>
 
-std::string srcSampleVertexShader = R"(
-    #version 330 core
-    layout(location = 0) in vec2 position;
-    layout(location = 1) in vec3 color;
 
-    out vec3 vColor;
-
-    void main() {
-        gl_Position = vec4(position, 0, 1.0);
-        vColor = color;
-    }
-)";
-
-std::string srcSampleFragmentShader = R"(
-    #version 330 core
-    out vec4 color;
-
-    void main() {
-        color = vec4(1, 0, 0, 0.3);
-    }
-)";
-
-std::string srcSampleFragmentShader2 = R"(
-    #version 330 core
-    out vec4 color;
-
-    void main() {
-        color = vec4(1, 0, 0, 1);
-    }
-)";
-
-std::string srcSampleFragmentShader3 = R"(
-    #version 330 core
-    in vec4 vColor;
-    out vec4 color;
-
-    void main() {
-        color = vColor;
-    }
-)";
 
 struct ShaderProgramSource {
     std::string vertexSource;
@@ -97,7 +58,7 @@ static unsigned int createProgram(const std::string& srcVertexShader, const std:
     return shaderProgram;
 }
 
-#define DEBUG  // Comment this out to disable debug messages
+//#define DEBUG  // Comment this out to disable debug messages
 
 // Macro for debug messages
 #ifdef DEBUG
@@ -207,11 +168,13 @@ int main(void)
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)(2 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
-    readShader("res/shaders/shader1.shader");
+    ShaderProgramSource sps1 = readShader("res/shaders/shader1.shader");
+    ShaderProgramSource sps2 = readShader("res/shaders/shader2.shader");
+    ShaderProgramSource sps3 = readShader("res/shaders/shader3.shader");
 
-    unsigned int program1 = createProgram(srcSampleVertexShader, srcSampleFragmentShader);
-    unsigned int program2 = createProgram(srcSampleVertexShader, srcSampleFragmentShader2);
-    unsigned int program3 = createProgram(srcSampleVertexShader, srcSampleFragmentShader3);
+    unsigned int program1 = createProgram(sps1.vertexSource, sps1.fragmentSource);
+    unsigned int program2 = createProgram(sps2.vertexSource, sps2.fragmentSource);
+    unsigned int program3 = createProgram(sps3.vertexSource, sps3.fragmentSource);
 
     glUseProgram(program1);
 
@@ -233,6 +196,8 @@ int main(void)
     }
 
     glDeleteProgram(program1);
+    glDeleteProgram(program2);
+    glDeleteProgram(program3);
     glfwDestroyWindow(window);
 
     glfwTerminate();

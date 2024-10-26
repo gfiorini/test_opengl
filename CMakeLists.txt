@@ -20,6 +20,11 @@ set(RESOURCE_DIR "${CMAKE_SOURCE_DIR}/res")
 set(OUTPUT_DIR "${CMAKE_BINARY_DIR}")
 file(COPY "${RESOURCE_DIR}" DESTINATION "${OUTPUT_DIR}")
 
+add_custom_target(copy_resources ALL
+        COMMAND ${CMAKE_COMMAND} -E copy_directory "${RESOURCE_DIR}" "${OUTPUT_DIR}/res"
+        DEPENDS ${RESOURCE_DIR}
+)
+
 target_include_directories(test_opengl PUBLIC dependencies/glfw/deps)
 target_include_directories(test_opengl PUBLIC dependencies/glfw/include)
 target_include_directories(test_opengl PUBLIC dependencies/glew/include)
