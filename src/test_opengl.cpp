@@ -22,6 +22,7 @@ std::string srcSampleVertexShader = R"(
 
     void main() {
         gl_Position = vec4(position, 0, 1.0);
+
     }
 )";
 
@@ -30,7 +31,7 @@ std::string srcSampleFragmentShader = R"(
     out vec4 color;
 
     void main() {
-        color = vec4(1.0, 0.5, 0.2, 1.0);
+        color = vec4(1, 0, 0, 0.3);
     }
 )";
 
@@ -39,6 +40,14 @@ static unsigned int compileShader(unsigned int SHADER_TYPE, const std::string& s
     const char* src = source.c_str();
     glShaderSource(shader, 1, &src, nullptr);
     glCompileShader(shader);
+    int success;
+    glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
+    if (!success) {
+        char infoLog[512];
+        glGetShaderInfoLog(shader, 512, nullptr, infoLog);
+        std::cerr << "Shader " << SHADER_TYPE << " Compile Error: " << infoLog << std::endl;
+
+    }
     return shader;
 }
 
@@ -50,6 +59,7 @@ static unsigned int createProgram(const std::string& srcVertexShader, const std:
     glAttachShader(shaderProgram, vertexShader);
     glAttachShader(shaderProgram, fragmentShader);
     glLinkProgram(shaderProgram);
+    glValidateProgram(shaderProgram);
 
     GLint success;
     glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
@@ -111,6 +121,9 @@ int main(void)
 
     constexpr GLsizei n = 1;
     GLuint vertexBuffer;
+
+    glEnable(GL_BLEND); // Enable blending
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     // create buffer to store vertexes
     glGenBuffers(n, &vertexBuffer);
