@@ -16,7 +16,59 @@
 //     { {   0.f,  0.6f }, { 0.f, 0.f, 1.f } }
 // };
 
+std::string srcSampleVertexShader = R"(
+    #version 330 core
+    layout(location = 0) in vec2 position;
 
+    void main() {
+        gl_Position = vec4(position, 0, 1.0);
+    }
+)";
+
+std::string srcSampleFragmentShader = R"(
+    #version 330 core
+    out vec4 color;
+
+    void main() {
+        color = vec4(1.0, 0.5, 0.2, 1.0);
+    }
+)";
+
+static unsigned int compileShader(unsigned int SHADER_TYPE, const std::string& source) {
+    unsigned int shader = glCreateShader(SHADER_TYPE);
+    const char* src = source.c_str();
+    glShaderSource(shader, 1, &src, nullptr);
+    glCompileShader(shader);
+    return shader;
+}
+
+static unsigned int createProgram(const std::string& srcVertexShader, const std::string& srcFragmentShader) {
+    unsigned int shaderProgram = glCreateProgram();
+    unsigned int vertexShader = compileShader(GL_VERTEX_SHADER, srcVertexShader);
+    unsigned int fragmentShader = compileShader(GL_FRAGMENT_SHADER, srcFragmentShader);
+
+    glAttachShader(shaderProgram, vertexShader);
+    glAttachShader(shaderProgram, fragmentShader);
+    glLinkProgram(shaderProgram);
+
+    GLint success;
+    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
+    if (!success) {
+        char infoLog[512];
+        glGetProgramInfoLog(shaderProgram, 512, nullptr, infoLog);
+        std::cerr << "Shader Program Linking Error: " << infoLog << std::endl;
+    }
+
+    // Delete the shaders as they’re linked into the program now and no longer needed
+    glDeleteShader(vertexShader);
+    glDeleteShader(fragmentShader);
+
+    return shaderProgram;
+}
+
+static unsigned int createSampleProgram() {
+    return createProgram(srcSampleVertexShader, srcSampleFragmentShader);
+}
 
 int main(void)
 {
@@ -52,9 +104,9 @@ int main(void)
 
     // vertix with pos and uvmap
     float vertices[] = {
-         -0.5f, -0.5f, 0, 0,
-          0.5f, -0.5f, 0, 0,
-          0.0f,  0.5f, 0, 0,
+        -0.5f, -0.5f, 0, 0,
+        0.5f, -0.5f, 0, 0,
+        0.0f,  0.5f, 0, 0,
     };
 
     constexpr GLsizei n = 1;
@@ -73,9 +125,14 @@ int main(void)
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void *)0);
     glEnableVertexAttribArray(0);
 
+
+    unsigned int sampleProgram = createSampleProgram();
+    glUseProgram(sampleProgram);
+
     while (!glfwWindowShouldClose(window))
     {
         glClear(GL_COLOR_BUFFER_BIT);
+
         glDrawArrays(GL_TRIANGLES, 0, 3);
         glfwSwapBuffers(window);
         glfwPollEvents();
