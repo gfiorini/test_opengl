@@ -43,8 +43,12 @@ static unsigned int compileShader(unsigned int SHADER_TYPE, const std::string& s
     int success;
     glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
     if (!success) {
-        char infoLog[512];
-        glGetShaderInfoLog(shader, 512, nullptr, infoLog);
+        GLint length;
+        glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &length);
+        std::cerr << "Shader " << SHADER_TYPE << " Compile Error, log length: " << length << " chars" << std::endl;
+
+        char infoLog[length];
+        glGetShaderInfoLog(shader, length, nullptr, infoLog);
         std::cerr << "Shader " << SHADER_TYPE << " Compile Error: " << infoLog << std::endl;
 
     }
