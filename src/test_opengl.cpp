@@ -3,6 +3,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <vector>
 
 
 
@@ -24,9 +25,10 @@ static unsigned int compileShader(unsigned int type, const std::string& source) 
         std::cerr << "Shader " << (type == GL_VERTEX_SHADER ? "Vertex" : "Fragment") <<
             " Compile Error, log length: " << length << " chars" << std::endl;
 
-        char infoLog[length];
-        glGetShaderInfoLog(shader, length, nullptr, infoLog);
-        std::cerr << "Shader " << (type == GL_VERTEX_SHADER ? "Vertex" : "Fragment") << " Compile Error: " << infoLog << std::endl;
+        std::vector<char> infoLog(length);
+        char* info_log = infoLog.data();
+        glGetShaderInfoLog(shader, length, nullptr, info_log);
+        std::cerr << "Shader " << (type == GL_VERTEX_SHADER ? "Vertex" : "Fragment") << " Compile Error: " << info_log << std::endl;
         glDeleteShader(shader);
         return 0;
     }
