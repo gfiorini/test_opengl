@@ -129,6 +129,9 @@ int main(void)
     if (!glfwInit())
         return -1;
 
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     /* Create a windowed mode window and its OpenGL context */
     window = glfwCreateWindow(1024, 1024, "Hello World", NULL, NULL);
@@ -165,9 +168,6 @@ int main(void)
         2, 3, 0  // second triangle
     };
 
-    unsigned int VBO;
-    unsigned int IBO;
-
     glEnable(GL_BLEND); // Enable blending
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -176,9 +176,14 @@ int main(void)
 
     glDebugMessageCallback(openglDebugCallback, nullptr);
 
+    unsigned int VAO;
+    glGenVertexArrays(1, &VAO);
+    glBindVertexArray(VAO);
+
     // buffer data
-    glGenBuffers(1, &VBO);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    unsigned int buffer;
+    glGenBuffers(1, &buffer);
+    glBindBuffer(GL_ARRAY_BUFFER, buffer);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)0);
     glEnableVertexAttribArray(0);
@@ -186,9 +191,12 @@ int main(void)
     glEnableVertexAttribArray(1);
 
     // index data
+    unsigned int IBO;
     glGenBuffers(1, &IBO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(vertexIndices), vertexIndices, GL_STATIC_DRAW);
+
+
 
 
 
@@ -204,18 +212,30 @@ int main(void)
     unsigned int program4 = createProgram(sps4.vertexSource, sps4.fragmentSource);
     GLint uniformColorLocation = glGetUniformLocation(program4, "u_Color");
 
-    glUseProgram(program1);
+
 
     //v-sync ON
     glfwSwapInterval(1);
 
     bool isProg4 = false;
     float increment = 0.05f;
-
     float alphaProgram4 = 0;
+
+    glUseProgram(program1);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
     while (!glfwWindowShouldClose(window))
     {
         glClear(GL_COLOR_BUFFER_BIT);
+
+        glBindBuffer(GL_ARRAY_BUFFER, buffer);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+
+        glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)0);
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)(2 * sizeof(float)));
+        glEnableVertexAttribArray(1);
 
         if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) {
             glUseProgram(program1);
