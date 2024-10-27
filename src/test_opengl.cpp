@@ -176,25 +176,21 @@ int main(void)
 
     glDebugMessageCallback(openglDebugCallback, nullptr);
 
-    // create buffer to store vertexes
+    // buffer data
     glGenBuffers(1, &VBO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-
-    glGenBuffers(1, &IBO);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
-
-    // copy vertexes and index
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(vertexIndices), vertexIndices, GL_STATIC_DRAW);
-
-    // size = num element in index (position = 2 elements, uv = 2 elements)
-    // stride = size in bytes of vertex 2*2 float (position) + 2*2 float (uv coords)
-    // pointer = offest size, position = 0, uvmap = 8 = 2 * 4bytes (1 float = 32bit = 4 bytes)
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)0);
     glEnableVertexAttribArray(0);
-
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)(2 * sizeof(float)));
     glEnableVertexAttribArray(1);
+
+    // index data
+    glGenBuffers(1, &IBO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(vertexIndices), vertexIndices, GL_STATIC_DRAW);
+
+
 
     ShaderProgramSource sps1 = readShader("res/shaders/shader1.shader");
     ShaderProgramSource sps2 = readShader("res/shaders/shader2.shader");
