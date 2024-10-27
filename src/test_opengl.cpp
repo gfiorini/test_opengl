@@ -201,6 +201,7 @@ int main(void)
     ShaderProgramSource sps3 = readShader("res/shaders/shader3.shader");
     ShaderProgramSource sps4 = readShader("res/shaders/shader4.shader");
 
+
     unsigned int program1 = createProgram(sps1.vertexSource, sps1.fragmentSource);
     unsigned int program2 = createProgram(sps2.vertexSource, sps2.fragmentSource);
     unsigned int program3 = createProgram(sps3.vertexSource, sps3.fragmentSource);
@@ -209,20 +210,42 @@ int main(void)
 
     glUseProgram(program1);
 
+    //v-sync ON
+    glfwSwapInterval(1);
+
+    bool isProg4 = false;
+    float increment = 0.05f;
+
+    float alphaProgram4 = 0;
     while (!glfwWindowShouldClose(window))
     {
         glClear(GL_COLOR_BUFFER_BIT);
 
         if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) {
             glUseProgram(program1);
+            isProg4 = false;
         } else if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) {
             glUseProgram(program2);
+            isProg4 = false;
         } else if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS) {
             glUseProgram(program3);
+            isProg4 = false;
         } else if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS) {
-            glUniform4f(uniformColorLocation, 1.0f, 0.5f, 0.2f, 0.1f);
             glUseProgram(program4);
+            isProg4 = true;
         }
+
+        //todo: refactor logic
+        if (isProg4) {
+            if (alphaProgram4 > 1) {
+                increment = -0.05f;
+            } else if (alphaProgram4 < 0) {
+                increment = 0.05f;
+            }
+            alphaProgram4 = alphaProgram4 + increment;
+            glUniform4f(uniformColorLocation, 0.0f, 0.5f, 0.2f, alphaProgram4);
+        }
+
 
 
         // glDrawW
