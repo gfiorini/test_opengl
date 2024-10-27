@@ -69,6 +69,17 @@ static unsigned int createProgram(const std::string& srcVertexShader, const std:
 #define DEBUG_PRINT(x)
 #endif
 
+void GLAPIENTRY openglDebugCallback(GLenum source, GLenum type, GLuint id,
+                                    GLenum severity, GLsizei length,
+                                    const GLchar* message, const void* userParam) {
+    std::cerr << "OpenGL Debug Message:\n";
+    std::cerr << "Source: " << source << "\n";
+    std::cerr << "Type: " << type << "\n";
+    std::cerr << "ID: " << id << "\n";
+    std::cerr << "Severity: " << severity << "\n";
+    std::cerr << "Message: " << message << "\n\n";
+}
+
 ShaderProgramSource readShader(const std::string& filepath) {
 
     enum ShaderType {
@@ -160,6 +171,11 @@ int main(void)
     glEnable(GL_BLEND); // Enable blending
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+    glEnable(GL_DEBUG_OUTPUT);              // Enable debug output
+    glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);  // Ensures callback is in sync with errors
+
+    glDebugMessageCallback(openglDebugCallback, nullptr);
+
     // create buffer to store vertexes
     glGenBuffers(1, &VBO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
@@ -183,10 +199,13 @@ int main(void)
     ShaderProgramSource sps1 = readShader("res/shaders/shader1.shader");
     ShaderProgramSource sps2 = readShader("res/shaders/shader2.shader");
     ShaderProgramSource sps3 = readShader("res/shaders/shader3.shader");
+    ShaderProgramSource sps4 = readShader("res/shaders/shader4.shader");
 
     unsigned int program1 = createProgram(sps1.vertexSource, sps1.fragmentSource);
     unsigned int program2 = createProgram(sps2.vertexSource, sps2.fragmentSource);
     unsigned int program3 = createProgram(sps3.vertexSource, sps3.fragmentSource);
+    unsigned int program4 = createProgram(sps4.vertexSource, sps4.fragmentSource);
+    GLint uniformColorLocation = glGetUniformLocation(program4, "u_Color");
 
     glUseProgram(program1);
 
@@ -200,7 +219,11 @@ int main(void)
             glUseProgram(program2);
         } else if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS) {
             glUseProgram(program3);
+        } else if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS) {
+            glUniform4f(uniformColorLocation, 1.0f, 0.5f, 0.2f, 0.1f);
+            glUseProgram(program4);
         }
+
 
         // glDrawW
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
@@ -211,6 +234,7 @@ int main(void)
     glDeleteProgram(program1);
     glDeleteProgram(program2);
     glDeleteProgram(program3);
+    glDeleteProgram(program4);
     glfwDestroyWindow(window);
 
     glfwTerminate();
