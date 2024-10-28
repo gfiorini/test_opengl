@@ -129,8 +129,8 @@ int main(void)
     if (!glfwInit())
         return -1;
 
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     /* Create a windowed mode window and its OpenGL context */
@@ -176,6 +176,7 @@ int main(void)
 
     glDebugMessageCallback(openglDebugCallback, nullptr);
 
+    // vertex array object (bind a buffer to a specific layout)
     unsigned int VAO;
     glGenVertexArrays(1, &VAO);
     glBindVertexArray(VAO);
@@ -196,10 +197,6 @@ int main(void)
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(vertexIndices), vertexIndices, GL_STATIC_DRAW);
 
-
-
-
-
     ShaderProgramSource sps1 = readShader("res/shaders/shader1.shader");
     ShaderProgramSource sps2 = readShader("res/shaders/shader2.shader");
     ShaderProgramSource sps3 = readShader("res/shaders/shader3.shader");
@@ -212,8 +209,6 @@ int main(void)
     unsigned int program4 = createProgram(sps4.vertexSource, sps4.fragmentSource);
     GLint uniformColorLocation = glGetUniformLocation(program4, "u_Color");
 
-
-
     //v-sync ON
     glfwSwapInterval(1);
 
@@ -221,7 +216,8 @@ int main(void)
     float increment = 0.05f;
     float alphaProgram4 = 0;
 
-    glUseProgram(program1);
+    glBindVertexArray(0);
+    glUseProgram(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
@@ -229,13 +225,8 @@ int main(void)
     {
         glClear(GL_COLOR_BUFFER_BIT);
 
-        glBindBuffer(GL_ARRAY_BUFFER, buffer);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
-
-        glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)0);
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)(2 * sizeof(float)));
-        glEnableVertexAttribArray(1);
+        glBindVertexArray(VAO);
+        // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
 
         if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) {
             glUseProgram(program1);
