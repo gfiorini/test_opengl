@@ -1,7 +1,11 @@
 ﻿// test_opengl.h : Include file for standard system include files,
 // or project specific include files.
 
-#pragma once
+#ifndef TEST_OPENGL_H
+
+#define TEST_OPENGL_H
+
+#endif
 
 // include <iostream>
 

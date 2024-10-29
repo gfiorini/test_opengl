@@ -5,6 +5,9 @@
 #include <sstream>
 #include <vector>
 
+#include "IndexBuffer.h"
+#include "Renderer.h"
+#include "VertexBuffer.h"
 
 
 struct ShaderProgramSource {
@@ -69,16 +72,7 @@ static unsigned int createProgram(const std::string& srcVertexShader, const std:
 #define DEBUG_PRINT(x)
 #endif
 
-void GLAPIENTRY openglDebugCallback(GLenum source, GLenum type, GLuint id,
-                                    GLenum severity, GLsizei length,
-                                    const GLchar* message, const void* userParam) {
-    std::cerr << "OpenGL Debug Message:\n";
-    std::cerr << "Source: " << source << "\n";
-    std::cerr << "Type: " << type << "\n";
-    std::cerr << "ID: " << id << "\n";
-    std::cerr << "Severity: " << severity << "\n";
-    std::cerr << "Message: " << message << "\n\n";
-}
+
 
 ShaderProgramSource readShader(const std::string& filepath) {
 
@@ -181,21 +175,26 @@ int main(void)
     glGenVertexArrays(1, &VAO);
     glBindVertexArray(VAO);
 
+
+    //unsigned int VBO;
+    // glGenBuffers(1, &VBO);
+    // glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    // glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
     // buffer data
-    unsigned int buffer;
-    glGenBuffers(1, &buffer);
-    glBindBuffer(GL_ARRAY_BUFFER, buffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    VertexBuffer vbo = { vertices, sizeof(vertices)};
+
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)0);
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)(2 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
     // index data
-    unsigned int IBO;
-    glGenBuffers(1, &IBO);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(vertexIndices), vertexIndices, GL_STATIC_DRAW);
+    // unsigned int IBO;
+    // glGenBuffers(1, &IBO);
+    // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+    // glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(vertexIndices), vertexIndices, GL_STATIC_DRAW);
+    IndexBuffer ibo = { vertexIndices, sizeof(vertexIndices) / sizeof(unsigned int)};
 
     ShaderProgramSource sps1 = readShader("res/shaders/shader1.shader");
     ShaderProgramSource sps2 = readShader("res/shaders/shader2.shader");
@@ -268,6 +267,9 @@ int main(void)
     glfwDestroyWindow(window);
 
     glfwTerminate();
-    exit(EXIT_SUCCESS);
+
+      exit(EXIT_SUCCESS);
+
+
 
 }

@@ -14,6 +14,12 @@ add_subdirectory(dependencies/glfw)
 
 add_definitions(-DGLEW_STATIC)
 add_executable (test_opengl "src/test_opengl.cpp"
+        src/Renderer.cpp
+        src/Renderer.h
+        src/VertexBuffer.cpp
+        src/VertexBuffer.h
+        src/IndexBuffer.cpp
+        src/IndexBuffer.h
 )
 
 set(RESOURCE_DIR "${CMAKE_SOURCE_DIR}/res")
