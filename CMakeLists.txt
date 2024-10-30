@@ -13,13 +13,13 @@ add_subdirectory(dependencies/glew)
 add_subdirectory(dependencies/glfw)
 
 add_definitions(-DGLEW_STATIC)
-add_executable (test_opengl "src/test_opengl.cpp"
-        src/Renderer.cpp
-        src/Renderer.h
-        src/VertexBuffer.cpp
-        src/VertexBuffer.h
-        src/IndexBuffer.cpp
-        src/IndexBuffer.h
+add_executable (test_opengl "src/main/test_opengl.cpp"
+        src/main/Renderer.cpp
+        src/main/Renderer.h
+        src/main/VertexBuffer.cpp
+        src/main/VertexBuffer.h
+        src/main/IndexBuffer.cpp
+        src/main/IndexBuffer.h
 )
 
 set(RESOURCE_DIR "${CMAKE_SOURCE_DIR}/res")
@@ -43,3 +43,4 @@ if (CMAKE_VERSION VERSION_GREATER 3.12)
 endif()
 
 
+add_executable(test src/test/Test.cpp src/test/Test.h)
