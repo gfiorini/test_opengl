@@ -5,6 +5,7 @@
 #ifndef SHADER_H
 #define SHADER_H
 #include <string>
+#include <unordered_map>
 
 struct ShaderProgramSource {
     std::string vertexSource;
@@ -24,6 +25,7 @@ public:
 private:
     unsigned int m_RendererID;
     std::string m_Filepath;
+    std::unordered_map<std::string, int> m_UniformLocationCache;
 
     ShaderProgramSource ParseShader(const std::string &filepath);
     unsigned int CompileShader(unsigned int type, const std::string &source);

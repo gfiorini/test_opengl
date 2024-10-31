@@ -117,11 +117,12 @@ unsigned int Shader::CreateShader(const std::string &srcVertexShader, const std:
 }
 
 int Shader::GetUniformLocation(const std::string &name) {
-    return glGetUniformLocation(m_RendererID, name.c_str());
+    if (m_UniformLocationCache.find(name) == m_UniformLocationCache.end()) {
+        m_UniformLocationCache[name] = glGetUniformLocation(m_RendererID, name.c_str());
+    }
+    return m_UniformLocationCache[name];
 }
 
 void Shader::SetUniform4v(const std::string &name, float v0, float v1, float v2, float v3) {
-    //TODO: handle cache
-    int uniformLocation = GetUniformLocation(name);
-    glUniform4f(uniformLocation, v0, v1, v2, v3);
+    glUniform4f(GetUniformLocation(name), v0, v1, v2, v3);
 }
