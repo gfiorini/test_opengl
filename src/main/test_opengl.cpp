@@ -156,26 +156,13 @@ int main(void) {
 
     glDebugMessageCallback(openglDebugCallback, nullptr);
 
-    // vertex array object (bind a buffer to a specific layout)
-
     VertexBuffer vbo(vertices, sizeof(vertices));
     VertexBufferLayout vbl;
-    vbl.Push(GL_FLOAT, 2);
-    vbl.Push(GL_FLOAT, 3);
-
-    // std::vector<VertexBufferElement> el = vbl.GetElements();
-    // for (unsigned int i = 0; i < el.size(); i++) {
-    //     VertexBufferElement vbe = el[i];
-    //     std::cout << "vbe.GetTypeSize():"  << vbe.GetTypeSize() << std::endl;
-    // }
+    vbl.Push<float>(2);
+    vbl.Push<float>(3);
 
     VertexArray va;
     va.AddBuffer(vbo, vbl);
-
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *) 0);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *) (2 * sizeof(float)));
-    glEnableVertexAttribArray(1);
 
     IndexBuffer ibo = {vertexIndices, 6};
 
