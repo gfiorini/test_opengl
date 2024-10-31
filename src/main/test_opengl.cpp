@@ -9,6 +9,7 @@
 #include "Renderer.h"
 #include "VertexArray.h"
 #include "VertexBuffer.h"
+#include "VertexBufferLayout.h"
 
 struct ShaderProgramSource {
     std::string vertexSource;
@@ -64,14 +65,7 @@ static unsigned int createProgram(const std::string &srcVertexShader, const std:
     return shaderProgram;
 }
 
-//#define DEBUG  // Comment this out to disable debug messages
 
-// Macro for debug messages
-#ifdef DEBUG
-#define DEBUG_PRINT(x) std::cout << "DEBUG: " << x << std::endl
-#else
-#define DEBUG_PRINT(x)
-#endif
 
 ShaderProgramSource readShader(const std::string &filepath) {
     enum ShaderType {
@@ -163,18 +157,27 @@ int main(void) {
     glDebugMessageCallback(openglDebugCallback, nullptr);
 
     // vertex array object (bind a buffer to a specific layout)
-    VertexArray va;
 
     VertexBuffer vbo(vertices, sizeof(vertices));
-    IndexBuffer ibo = {vertexIndices, 6};
+    VertexBufferLayout vbl;
+    vbl.Push(GL_FLOAT, 2);
+    vbl.Push(GL_FLOAT, 3);
 
-    va.Bind();
-    vbo.Bind();
+    // std::vector<VertexBufferElement> el = vbl.GetElements();
+    // for (unsigned int i = 0; i < el.size(); i++) {
+    //     VertexBufferElement vbe = el[i];
+    //     std::cout << "vbe.GetTypeSize():"  << vbe.GetTypeSize() << std::endl;
+    // }
+
+    VertexArray va;
+    va.AddBuffer(vbo, vbl);
 
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *) 0);
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *) (2 * sizeof(float)));
     glEnableVertexAttribArray(1);
+
+    IndexBuffer ibo = {vertexIndices, 6};
 
     ShaderProgramSource sps1 = readShader("res/shaders/shader1.shader");
     ShaderProgramSource sps2 = readShader("res/shaders/shader2.shader");
@@ -194,10 +197,10 @@ int main(void) {
     float increment = 0.05f;
     float alphaProgram4 = 0;
 
-    glBindVertexArray(0);
+    va.Unbind();
     glUseProgram(0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    vbo.Unbind();
+    ibo.Unbind();
 
     while (!glfwWindowShouldClose(window)) {
         glClear(GL_COLOR_BUFFER_BIT);
