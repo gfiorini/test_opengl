@@ -2,7 +2,6 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include <fstream>
-#include <sstream>
 #include <vector>
 
 #include "IndexBuffer.h"
@@ -10,103 +9,9 @@
 #include "VertexArray.h"
 #include "VertexBuffer.h"
 #include "VertexBufferLayout.h"
+#include "Shader.h"
 
-struct ShaderProgramSource {
-    std::string vertexSource;
-    std::string fragmentSource;
-};
-
-static unsigned int compileShader(unsigned int type, const std::string &source) {
-    unsigned int shader = glCreateShader(type);
-    const char *src = source.c_str();
-    glShaderSource(shader, 1, &src, nullptr);
-    glCompileShader(shader);
-    int success;
-    glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
-    if (!success) {
-        GLint length;
-        glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &length);
-        std::cerr << "Shader " << (type == GL_VERTEX_SHADER ? "Vertex" : "Fragment") <<
-                " Compile Error, log length: " << length << " chars" << std::endl;
-
-        std::vector<char> infoLog(length);
-        char *info_log = infoLog.data();
-        glGetShaderInfoLog(shader, length, nullptr, info_log);
-        std::cerr << "Shader " << (type == GL_VERTEX_SHADER ? "Vertex" : "Fragment") << " Compile Error: " << info_log
-                << std::endl;
-        glDeleteShader(shader);
-        return 0;
-    }
-    return shader;
-}
-
-static unsigned int CreateShader(const std::string &srcVertexShader, const std::string &srcFragmentShader) {
-    unsigned int shaderProgram = glCreateProgram();
-    unsigned int vertexShader = compileShader(GL_VERTEX_SHADER, srcVertexShader);
-    unsigned int fragmentShader = compileShader(GL_FRAGMENT_SHADER, srcFragmentShader);
-
-    glAttachShader(shaderProgram, vertexShader);
-    glAttachShader(shaderProgram, fragmentShader);
-    glLinkProgram(shaderProgram);
-    glValidateProgram(shaderProgram);
-
-    GLint success;
-    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-    if (!success) {
-        char infoLog[512];
-        glGetProgramInfoLog(shaderProgram, 512, nullptr, infoLog);
-        std::cerr << "Shader Program Linking Error: " << infoLog << std::endl;
-    }
-
-    // Delete the shaders as they’re linked into the program now and no longer needed
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
-
-    return shaderProgram;
-}
-
-
-
-ShaderProgramSource parseShader(const std::string &filepath) {
-    enum ShaderType {
-        NONE = -1,
-        VERTEX = 0,
-        FRAGMENT = 1
-    };
-
-    std::stringstream shaders[2];
-
-    std::ifstream file(filepath);
-    if (!file.is_open()) {
-        std::cerr << "Could not open shader file" << std::endl;
-    }
-
-    ShaderType shaderType = NONE;
-    std::string line;
-    while (std::getline(file, line)) {
-        if (line.find("#vertex shader") != std::string::npos) {
-            shaderType = VERTEX;
-        } else if (line.find("#fragment shader") != std::string::npos) {
-            shaderType = FRAGMENT;
-        } else {
-            if (shaderType != NONE) {
-                shaders[shaderType] << line << std::endl;
-            }
-        }
-    }
-
-    ShaderProgramSource result;
-    result.vertexSource = shaders[0].str();
-    result.fragmentSource = shaders[1].str();
-
-    DEBUG_PRINT("VERTEX SHADER SOURCE" << std::endl << result.vertexSource << std::endl);
-    DEBUG_PRINT("FRAGMENT SHADER SOURCE" << std::endl << result.fragmentSource << std::endl);
-
-    file.close();
-    return result;
-}
-
-int main(void) {
+int main() {
     GLFWwindow *window;
 
     /* Initialize the library */
@@ -166,16 +71,10 @@ int main(void) {
 
     IndexBuffer ibo = {vertexIndices, 6};
 
-    ShaderProgramSource sps1 = parseShader("res/shaders/shader1.shader");
-    ShaderProgramSource sps2 = parseShader("res/shaders/shader2.shader");
-    ShaderProgramSource sps3 = parseShader("res/shaders/shader3.shader");
-    ShaderProgramSource sps4 = parseShader("res/shaders/shader4.shader");
-
-    unsigned int program1 = CreateShader(sps1.vertexSource, sps1.fragmentSource);
-    unsigned int program2 = CreateShader(sps2.vertexSource, sps2.fragmentSource);
-    unsigned int program3 = CreateShader(sps3.vertexSource, sps3.fragmentSource);
-    unsigned int program4 = CreateShader(sps4.vertexSource, sps4.fragmentSource);
-    GLint uniformColorLocation = glGetUniformLocation(program4, "u_Color");
+    Shader shader1 = Shader("res/shaders/shader1.shader");
+    Shader shader2 = Shader("res/shaders/shader2.shader");
+    Shader shader3 = Shader("res/shaders/shader3.shader");
+    Shader shader4 = Shader("res/shaders/shader4.shader");
 
     //v-sync ON
     glfwSwapInterval(1);
@@ -185,7 +84,6 @@ int main(void) {
     float alphaProgram4 = 0;
 
     va.Unbind();
-    glUseProgram(0);
     vbo.Unbind();
     ibo.Unbind();
 
@@ -197,16 +95,16 @@ int main(void) {
         ibo.Bind();
 
         if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) {
-            glUseProgram(program1);
+            shader1.Bind();
             isProg4 = false;
         } else if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) {
-            glUseProgram(program2);
+            shader2.Bind();
             isProg4 = false;
         } else if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS) {
-            glUseProgram(program3);
+            shader3.Bind();
             isProg4 = false;
         } else if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS) {
-            glUseProgram(program4);
+            shader4.Bind();
             isProg4 = true;
         }
 
@@ -218,7 +116,7 @@ int main(void) {
                 increment = 0.05f;
             }
             alphaProgram4 = alphaProgram4 + increment;
-            glUniform4f(uniformColorLocation, 0.0f, 0.5f, 0.2f, alphaProgram4);
+            shader4.SetUniform4v("u_Color", 0.0f, 0.5f, 0.2f, alphaProgram4);
         }
 
         // glDrawW
@@ -227,10 +125,6 @@ int main(void) {
         glfwPollEvents();
     }
 
-    glDeleteProgram(program1);
-    glDeleteProgram(program2);
-    glDeleteProgram(program3);
-    glDeleteProgram(program4);
     glfwDestroyWindow(window);
 
     glfwTerminate();
