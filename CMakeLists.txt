@@ -20,6 +20,8 @@ add_executable (test_opengl "src/main/test_opengl.cpp"
         src/main/VertexBuffer.h
         src/main/IndexBuffer.cpp
         src/main/IndexBuffer.h
+        src/main/VertexArray.cpp
+        src/main/VertexArray.h
 )
 
 set(RESOURCE_DIR "${CMAKE_SOURCE_DIR}/res")

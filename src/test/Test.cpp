@@ -19,30 +19,21 @@ void test1() {
     std::cout << "sizeof(float) " << sizeof(float) << std::endl;
     std::cout << "sizeof(double): " << sizeof(double) << std::endl;
     std::cout << "sizeof(unsigned int): " << sizeof(unsigned int) << std::endl;
-
 }
-
-
-
-
 
 void test2() {
     int r = strcmp("abcd", "abcd"); //return 0 if equal
     if (r) {
         std::cout << "strcmp(" << __FILE__ << ", " << __LINE__ << ") " << r << std::endl;
-    } else {
-
     }
-
 }
 
 void testMemory() {
     long long size = 8LL * 1024 * 1024 * 1024; // 8 GB
 
-    char* buffer = (char*)malloc(size); // Allocate memory
+    char *buffer = (char *) malloc(size); // Allocate memory
 
     if (buffer == NULL) {
-        printf("Memory allocation failed.\n");
         return;
     }
 
@@ -53,21 +44,11 @@ void testMemory() {
     getchar(); // Wait for user input
 
     free(buffer); // Free allocated memory
-
 }
 
-
-
-void callFunction(int(* aaa)(const char *x, const char *y)) {
+void callFunction(int (*aaa)(const char *x, const char *y)) {
     aaa("hello", "world");
 }
 
 int main() {
-
-    testMemory();
-
-    std::cout << "fine" << std::endl;
-
 }
-
-

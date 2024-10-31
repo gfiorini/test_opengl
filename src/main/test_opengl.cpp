@@ -7,17 +7,17 @@
 
 #include "IndexBuffer.h"
 #include "Renderer.h"
+#include "VertexArray.h"
 #include "VertexBuffer.h"
-
 
 struct ShaderProgramSource {
     std::string vertexSource;
     std::string fragmentSource;
 };
 
-static unsigned int compileShader(unsigned int type, const std::string& source) {
+static unsigned int compileShader(unsigned int type, const std::string &source) {
     unsigned int shader = glCreateShader(type);
-    const char* src = source.c_str();
+    const char *src = source.c_str();
     glShaderSource(shader, 1, &src, nullptr);
     glCompileShader(shader);
     int success;
@@ -26,19 +26,20 @@ static unsigned int compileShader(unsigned int type, const std::string& source) 
         GLint length;
         glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &length);
         std::cerr << "Shader " << (type == GL_VERTEX_SHADER ? "Vertex" : "Fragment") <<
-            " Compile Error, log length: " << length << " chars" << std::endl;
+                " Compile Error, log length: " << length << " chars" << std::endl;
 
         std::vector<char> infoLog(length);
-        char* info_log = infoLog.data();
+        char *info_log = infoLog.data();
         glGetShaderInfoLog(shader, length, nullptr, info_log);
-        std::cerr << "Shader " << (type == GL_VERTEX_SHADER ? "Vertex" : "Fragment") << " Compile Error: " << info_log << std::endl;
+        std::cerr << "Shader " << (type == GL_VERTEX_SHADER ? "Vertex" : "Fragment") << " Compile Error: " << info_log
+                << std::endl;
         glDeleteShader(shader);
         return 0;
     }
     return shader;
 }
 
-static unsigned int createProgram(const std::string& srcVertexShader, const std::string& srcFragmentShader) {
+static unsigned int createProgram(const std::string &srcVertexShader, const std::string &srcFragmentShader) {
     unsigned int shaderProgram = glCreateProgram();
     unsigned int vertexShader = compileShader(GL_VERTEX_SHADER, srcVertexShader);
     unsigned int fragmentShader = compileShader(GL_FRAGMENT_SHADER, srcFragmentShader);
@@ -72,10 +73,7 @@ static unsigned int createProgram(const std::string& srcVertexShader, const std:
 #define DEBUG_PRINT(x)
 #endif
 
-
-
-ShaderProgramSource readShader(const std::string& filepath) {
-
+ShaderProgramSource readShader(const std::string &filepath) {
     enum ShaderType {
         NONE = -1,
         VERTEX = 0,
@@ -114,10 +112,8 @@ ShaderProgramSource readShader(const std::string& filepath) {
     return result;
 }
 
-int main(void)
-{
-
-    GLFWwindow* window;
+int main(void) {
+    GLFWwindow *window;
 
     /* Initialize the library */
     if (!glfwInit())
@@ -129,8 +125,7 @@ int main(void)
 
     /* Create a windowed mode window and its OpenGL context */
     window = glfwCreateWindow(1024, 1024, "Hello World", NULL, NULL);
-    if (!window)
-    {
+    if (!window) {
         glfwTerminate();
         return -1;
     }
@@ -139,68 +134,52 @@ int main(void)
     glfwMakeContextCurrent(window);
 
     GLenum err = glewInit();
-    if (GLEW_OK != err)
-    {
+    if (GLEW_OK != err) {
         /* Problem: glewInit failed, something is seriously wrong. */
         fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
-
     }
     fprintf(stdout, "GLEW Version: %s\n", glewGetString(GLEW_VERSION));
     fprintf(stdout, "OpenGl Version / Driver version: %s\n", glGetString(GL_VERSION));
 
-
     // vertix with pos and color
     float vertices[] = {
         0, 0, 1, 0, 0, // 0
-        0.5f, 0,  0, 1, 0, // 1
-        0.5f,  0.5f,  0, 0, 1, // 2
+        0.5f, 0, 0, 1, 0, // 1
+        0.5f, 0.5f, 0, 0, 1, // 2
         0, 0.5f, 0, 1, 0 // 3
     };
 
-    unsigned int vertexIndices[] {
+    unsigned int vertexIndices[]{
         0, 1, 2, // first triangle
-        2, 3, 0  // second triangle
+        2, 3, 0 // second triangle
     };
 
     glEnable(GL_BLEND); // Enable blending
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    glEnable(GL_DEBUG_OUTPUT);              // Enable debug output
-    glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);  // Ensures callback is in sync with errors
+    glEnable(GL_DEBUG_OUTPUT); // Enable debug output
+    glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS); // Ensures callback is in sync with errors
 
     glDebugMessageCallback(openglDebugCallback, nullptr);
 
     // vertex array object (bind a buffer to a specific layout)
-    unsigned int VAO;
-    glGenVertexArrays(1, &VAO);
-    glBindVertexArray(VAO);
+    VertexArray va;
 
+    VertexBuffer vbo(vertices, sizeof(vertices));
+    IndexBuffer ibo = {vertexIndices, 6};
 
-    //unsigned int VBO;
-    // glGenBuffers(1, &VBO);
-    // glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    // glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    va.Bind();
+    vbo.Bind();
 
-    // buffer data
-    VertexBuffer vbo = { vertices, sizeof(vertices)};
-
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *) 0);
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)(2 * sizeof(float)));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *) (2 * sizeof(float)));
     glEnableVertexAttribArray(1);
-
-    // index data
-    // unsigned int IBO;
-    // glGenBuffers(1, &IBO);
-    // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
-    // glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(vertexIndices), vertexIndices, GL_STATIC_DRAW);
-    IndexBuffer ibo = { vertexIndices, 6};
 
     ShaderProgramSource sps1 = readShader("res/shaders/shader1.shader");
     ShaderProgramSource sps2 = readShader("res/shaders/shader2.shader");
     ShaderProgramSource sps3 = readShader("res/shaders/shader3.shader");
     ShaderProgramSource sps4 = readShader("res/shaders/shader4.shader");
-
 
     unsigned int program1 = createProgram(sps1.vertexSource, sps1.fragmentSource);
     unsigned int program2 = createProgram(sps2.vertexSource, sps2.fragmentSource);
@@ -220,11 +199,12 @@ int main(void)
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-    while (!glfwWindowShouldClose(window))
-    {
+    while (!glfwWindowShouldClose(window)) {
         glClear(GL_COLOR_BUFFER_BIT);
 
-        glBindVertexArray(VAO);
+        //todo: how to handle VAO e IBO bindings
+        va.Bind();
+        ibo.Bind();
 
         if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) {
             glUseProgram(program1);
@@ -251,8 +231,6 @@ int main(void)
             glUniform4f(uniformColorLocation, 0.0f, 0.5f, 0.2f, alphaProgram4);
         }
 
-
-
         // glDrawW
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
         glfwSwapBuffers(window);
@@ -267,10 +245,5 @@ int main(void)
 
     glfwTerminate();
 
-
-
     return 0;
-
-
-
 }

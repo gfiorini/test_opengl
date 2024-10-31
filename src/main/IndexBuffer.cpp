@@ -1,9 +1,7 @@
 //
 // Created by gfiorini on 10/29/24.
 //
-
 #include "IndexBuffer.h"
-
 #include <cassert>
 #include <GL/glew.h>
 
