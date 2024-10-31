@@ -24,6 +24,10 @@ add_executable (test_opengl "src/main/test_opengl.cpp"
         src/main/VertexArray.h
         src/main/VertexBufferLayout.cpp
         src/main/VertexBufferLayout.h
+        cmake-build-debug/Testing/Shader.cpp
+        cmake-build-debug/Testing/Shader.h
+        src/main/Shader.cpp
+        src/main/Shader.h
 )
 
 set(RESOURCE_DIR "${CMAKE_SOURCE_DIR}/res")

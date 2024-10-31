@@ -40,7 +40,7 @@ static unsigned int compileShader(unsigned int type, const std::string &source) 
     return shader;
 }
 
-static unsigned int createProgram(const std::string &srcVertexShader, const std::string &srcFragmentShader) {
+static unsigned int CreateShader(const std::string &srcVertexShader, const std::string &srcFragmentShader) {
     unsigned int shaderProgram = glCreateProgram();
     unsigned int vertexShader = compileShader(GL_VERTEX_SHADER, srcVertexShader);
     unsigned int fragmentShader = compileShader(GL_FRAGMENT_SHADER, srcFragmentShader);
@@ -67,7 +67,7 @@ static unsigned int createProgram(const std::string &srcVertexShader, const std:
 
 
 
-ShaderProgramSource readShader(const std::string &filepath) {
+ShaderProgramSource parseShader(const std::string &filepath) {
     enum ShaderType {
         NONE = -1,
         VERTEX = 0,
@@ -166,15 +166,15 @@ int main(void) {
 
     IndexBuffer ibo = {vertexIndices, 6};
 
-    ShaderProgramSource sps1 = readShader("res/shaders/shader1.shader");
-    ShaderProgramSource sps2 = readShader("res/shaders/shader2.shader");
-    ShaderProgramSource sps3 = readShader("res/shaders/shader3.shader");
-    ShaderProgramSource sps4 = readShader("res/shaders/shader4.shader");
+    ShaderProgramSource sps1 = parseShader("res/shaders/shader1.shader");
+    ShaderProgramSource sps2 = parseShader("res/shaders/shader2.shader");
+    ShaderProgramSource sps3 = parseShader("res/shaders/shader3.shader");
+    ShaderProgramSource sps4 = parseShader("res/shaders/shader4.shader");
 
-    unsigned int program1 = createProgram(sps1.vertexSource, sps1.fragmentSource);
-    unsigned int program2 = createProgram(sps2.vertexSource, sps2.fragmentSource);
-    unsigned int program3 = createProgram(sps3.vertexSource, sps3.fragmentSource);
-    unsigned int program4 = createProgram(sps4.vertexSource, sps4.fragmentSource);
+    unsigned int program1 = CreateShader(sps1.vertexSource, sps1.fragmentSource);
+    unsigned int program2 = CreateShader(sps2.vertexSource, sps2.fragmentSource);
+    unsigned int program3 = CreateShader(sps3.vertexSource, sps3.fragmentSource);
+    unsigned int program4 = CreateShader(sps4.vertexSource, sps4.fragmentSource);
     GLint uniformColorLocation = glGetUniformLocation(program4, "u_Color");
 
     //v-sync ON
