@@ -105,7 +105,8 @@ int main() {
                 increment = 0.05f;
             }
             alphaProgram4 = alphaProgram4 + increment;
-            shader4.SetUniform4v("u_Color", 0.0f, 0.5f, 0.2f, alphaProgram4);
+            currentShader.Bind();
+            currentShader.SetUniform4v("u_Color", 0.0f, 0.5f, 0.2f, alphaProgram4);
         }
 
         renderer.Draw(va, ibo, currentShader);

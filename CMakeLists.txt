@@ -28,7 +28,7 @@ add_executable (test_opengl "src/main/test_opengl.cpp"
         cmake-build-debug/Testing/Shader.h
         src/main/Shader.cpp
         src/main/Shader.h
-        src/main/Debug.h
+        src/main/Asserts.h
 )
 
 set(RESOURCE_DIR "${CMAKE_SOURCE_DIR}/res")

@@ -6,7 +6,7 @@
 #define VERTEXBUFFERLAYOUT_H
 #include <GL/glew.h>
 #include <vector>
-#include "Debug.h"
+#include "Asserts.h"
 
 
 struct VertexBufferElement {
