@@ -53,13 +53,9 @@ int main() {
         2, 3, 0 // second triangle
     };
 
-    glEnable(GL_BLEND); // Enable blending
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    glEnable(GL_DEBUG_OUTPUT); // Enable debug output
-    glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS); // Ensures callback is in sync with errors
-
-    glDebugMessageCallback(openglDebugCallback, nullptr);
+    Renderer renderer;
+    renderer.EnableBlending();
+    renderer.EnableDebug();
 
     VertexBuffer vbo(vertices, sizeof(vertices));
     VertexBufferLayout vbl;
@@ -83,28 +79,21 @@ int main() {
     float increment = 0.05f;
     float alphaProgram4 = 0;
 
-    va.Unbind();
-    vbo.Unbind();
-    ibo.Unbind();
-
+    Shader currentShader = shader1;
     while (!glfwWindowShouldClose(window)) {
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        //todo: how to handle VAO e IBO bindings
-        va.Bind();
-        ibo.Bind();
+        renderer.Clear();
 
         if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) {
-            shader1.Bind();
+            currentShader = shader1;
             isProg4 = false;
         } else if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) {
-            shader2.Bind();
+            currentShader = shader2;
             isProg4 = false;
         } else if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS) {
-            shader3.Bind();
+            currentShader = shader3;
             isProg4 = false;
         } else if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS) {
-            shader4.Bind();
+            currentShader = shader4;
             isProg4 = true;
         }
 
@@ -119,8 +108,7 @@ int main() {
             shader4.SetUniform4v("u_Color", 0.0f, 0.5f, 0.2f, alphaProgram4);
         }
 
-        // glDrawW
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+        renderer.Draw(va, ibo, currentShader);
         glfwSwapBuffers(window);
         glfwPollEvents();
     }

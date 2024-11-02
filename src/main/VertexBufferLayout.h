@@ -6,7 +6,8 @@
 #define VERTEXBUFFERLAYOUT_H
 #include <GL/glew.h>
 #include <vector>
-#include "Renderer.h"
+#include "Debug.h"
+
 
 struct VertexBufferElement {
     int type;
