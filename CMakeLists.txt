@@ -13,7 +13,7 @@ add_subdirectory(dependencies/glew)
 add_subdirectory(dependencies/glfw)
 
 add_definitions(-DGLEW_STATIC)
-add_executable(test_opengl "src/main/test_opengl.cpp"
+add_executable(test_opengl "src/main/Application.cpp"
         src/main/Renderer.cpp
         src/main/Renderer.h
         src/main/VertexBuffer.cpp
@@ -29,6 +29,8 @@ add_executable(test_opengl "src/main/test_opengl.cpp"
         src/main/Asserts.h
         src/main/stb_image.h
         src/main/stb_image.cpp
+        src/main/Texture.h
+        src/main/Texture.cpp
 )
 
 set(RESOURCE_DIR "${CMAKE_SOURCE_DIR}/res")

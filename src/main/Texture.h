@@ -8,16 +8,17 @@
 
 class Texture {
 public:
-    explicit Texture(const std::string &filename);
+    explicit Texture(const std::string &path);
     ~Texture();
 
-    void Bind();
+    void Bind(unsigned int slot = 0) const;
     void Unbind();
 
 private:
-    std::string filename;
-    unsigned char* data;
-    int width, height, channels;
+    unsigned int m_RendererID;
+    const char* m_FilePath;
+    unsigned char* m_Data;
+    int m_Width, m_Height, m_BPP;
 
 };
 

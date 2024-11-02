@@ -10,8 +10,14 @@
 #include "VertexBuffer.h"
 #include "VertexBufferLayout.h"
 #include "Shader.h"
+#include "Texture.h"
 
 int main() {
+
+    Texture t = Texture("res/textures/flower.png");
+
+
+
     GLFWwindow *window;
 
     /* Initialize the library */
