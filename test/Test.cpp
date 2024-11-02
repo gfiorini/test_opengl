@@ -7,6 +7,9 @@
 #include <cstring>
 #include <iostream>
 #include <ostream>
+#include "stb_image.h"
+
+
 
 void test1() {
     std::cout << "sizeof(unsigned char): " << sizeof(unsigned char) << std::endl;
@@ -22,7 +25,7 @@ void test1() {
 }
 
 void test2() {
-    int r = strcmp("abcd", "abcd"); //return 0 if equal
+    int r = strcmp("abcd", "Abcd"); //return 0 if equal
     if (r) {
         std::cout << "strcmp(" << __FILE__ << ", " << __LINE__ << ") " << r << std::endl;
     }
@@ -46,9 +49,19 @@ void testMemory() {
     free(buffer); // Free allocated memory
 }
 
-void callFunction(int (*aaa)(const char *x, const char *y)) {
-    aaa("hello", "world");
+void testStbImage() {
+    char const * filename = "res/textures/flower.png";
+
+    int x, y, channels;
+    unsigned char* img = stbi_load(filename, &x, &y, &channels, 4);
+    if (img == NULL) {
+        std::cout << "stbi_load 2 failed" << std::endl;
+    } else {
+        std::cout << "stbi_load OK" << std::endl;
+        std::printf("Image filename: %s, %dx%d pixels, #channels: %d", filename, x, y, channels);
+    }
 }
 
 int main() {
+    testStbImage();
 }
