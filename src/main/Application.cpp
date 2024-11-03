@@ -43,17 +43,16 @@ int main() {
     fprintf(stdout, "GLEW Version: %s\n", glewGetString(GLEW_VERSION));
     fprintf(stdout, "OpenGl Version / Driver version: %s\n", glGetString(GL_VERSION));
 
-    // vertix with pos and color
     float vertices[] = {
-        0, 0,          0, 0,      1, 0, 0       ,// 0
-        0.5f, 0,       1, 0,      0, 1, 0,       // 1
-        0.5f, 0.5f,    1, 1,      1, 0, 1,      // 2
-        0, 0.5f,       0, 1,      1, 1, 0       // 3
+            0, 0, 0, 0, 1, 0, 0,// 0
+            0.5f, 0, 1, 0, 0, 1, 0,       // 1
+            0.5f, 0.5f, 1, 1, 1, 0, 1,      // 2
+            0, 0.5f, 0, 1, 1, 1, 0       // 3
     };
 
     unsigned int vertexIndices[]{
-        0, 1, 2, // first triangle
-        0, 2, 3 // second triangle
+            0, 1, 2, // first triangle
+            0, 2, 3 // second triangle
     };
 
     Renderer renderer;
@@ -71,20 +70,19 @@ int main() {
 
     IndexBuffer ibo = {vertexIndices, 6};
 
-
-
     Shader uvShader = Shader("res/shaders/uv.shader");
     Shader fixedColorShader = Shader("res/shaders/fixedColor.shader");
     Shader variableColorShader = Shader("res/shaders/variableColor.shader");
     Shader blinkingShader = Shader("res/shaders/blinking.shader");
 
-    Texture t = Texture("res/textures/flower.png");
+    // Texture t = Texture("res/textures/flower.png");
+    Texture t = Texture("res/textures/whatsapp.png");
     t.Bind();
 
     Shader textureShader = Shader("res/shaders/textureShader.shader");
     textureShader.Bind();
     textureShader.SetUniform1i("u_Texture", 0);
-
+    textureShader.Unbind();
 
     //v-sync ON
     glfwSwapInterval(1);
@@ -103,12 +101,10 @@ int main() {
         } else if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) {
             currentShader = fixedColorShader;
             isProg4 = false;
-        }
-        else if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS) {
+        } else if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS) {
             currentShader = variableColorShader;
             isProg4 = false;
-        }
-        else if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS) {
+        } else if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS) {
             currentShader = blinkingShader;
             isProg4 = true;
         } else if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS) {
