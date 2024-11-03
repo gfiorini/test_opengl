@@ -12,6 +12,28 @@
 #include "Shader.h"
 #include "Texture.h"
 
+
+struct Position {
+    float x;
+    float y;
+};
+
+struct Color {
+    float r;
+    float g;
+    float b;
+};
+struct UV {
+    float u;
+    float v;
+};
+
+struct Vertex {
+    Position position;
+    UV uv;
+    Color color;
+};
+
 int main() {
 
 
@@ -43,12 +65,14 @@ int main() {
     fprintf(stdout, "GLEW Version: %s\n", glewGetString(GLEW_VERSION));
     fprintf(stdout, "OpenGl Version / Driver version: %s\n", glGetString(GL_VERSION));
 
-    float vertices[] = {
-            0, 0, 0, 0, 1, 0, 0,// 0
-            0.5f, 0, 1, 0, 0, 1, 0,       // 1
-            0.5f, 0.5f, 1, 1, 1, 0, 1,      // 2
-            0, 0.5f, 0, 1, 1, 1, 0       // 3
+    Vertex vertices[] = {
+        {{0,0}, {0,0},{0,0,1} },
+        {{0.5f,0}, {1,0}, {1,0,0} },
+        {{0.5f,0.5f}, {1,1} , {1,1,1},},
+        {{0,0.5f}, {0,1}, {0,1,1}},
     };
+
+
 
     unsigned int vertexIndices[]{
             0, 1, 2, // first triangle
