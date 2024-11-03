@@ -11,6 +11,8 @@
 #include "VertexBufferLayout.h"
 #include "Shader.h"
 #include "Texture.h"
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_inverse.hpp"
 
 
 struct Position {
@@ -48,7 +50,7 @@ int main() {
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(1024, 1024, "Hello World", NULL, NULL);
+    window = glfwCreateWindow(1920, 1080, "Hello World", NULL, NULL);
     if (!window) {
         glfwTerminate();
         return -1;
@@ -66,10 +68,10 @@ int main() {
     fprintf(stdout, "OpenGl Version / Driver version: %s\n", glGetString(GL_VERSION));
 
     Vertex vertices[] = {
-        {{0,0}, {0,0},{0,0,1} },
-        {{0.5f,0}, {1,0}, {1,0,0} },
-        {{0.5f,0.5f}, {1,1} , {1,1,1},},
-        {{0,0.5f}, {0,1}, {0,1,1}},
+        {{-0.5,-0.5}, {0,0},{0,0,1} },
+        {{0.5,-0.5}, {1,0}, {1,0,0} },
+        {{0.5,0.5}, {1,1} , {1,1,1},},
+        {{-0.5,0.5}, {0,1}, {0,1,1}},
     };
 
 

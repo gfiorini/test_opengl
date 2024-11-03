@@ -32,6 +32,10 @@ git submodule set-branch -b glew-cmake-release .
 cd ..
 git submodule add https://github.com/glfw/glfw.git 
 git checkout 3.4
+cd ..
+git submodule add https://github.com/g-truc/glm.git glm
+cd glm
+git checkout 1.0.1
 
 
 
