@@ -45,15 +45,15 @@ int main() {
 
     // vertix with pos and color
     float vertices[] = {
-        0, 0, 1, 0, 0, 0.0f, 0.0f, // 0
-        0.5f, 0, 0, 1, 0, 1.0f, 0.0f,// 1
-        0.5f, 0.5f, 0, 0, 1, 1.0f, 1.0f, // 2
-        0, 0.5f, 0, 1, 0, 0.0f, 1.0f // 3
+        0, 0,          0, 0,      1, 0, 0       ,// 0
+        0.5f, 0,       1, 0,      0, 1, 0,       // 1
+        0.5f, 0.5f,    1, 1,      1, 0, 1,      // 2
+        0, 0.5f,       0, 1,      1, 1, 0       // 3
     };
 
     unsigned int vertexIndices[]{
         0, 1, 2, // first triangle
-        2, 3, 0 // second triangle
+        0, 2, 3 // second triangle
     };
 
     Renderer renderer;
@@ -63,8 +63,8 @@ int main() {
     VertexBuffer vbo(vertices, sizeof(vertices));
     VertexBufferLayout vbl;
     vbl.Push<float>(2);
-    vbl.Push<float>(3);
     vbl.Push<float>(2);
+    vbl.Push<float>(3);
 
     VertexArray va;
     va.AddBuffer(vbo, vbl);
@@ -73,10 +73,10 @@ int main() {
 
 
 
-    Shader shader1 = Shader("res/shaders/shader1.shader");
-    Shader shader2 = Shader("res/shaders/shader2.shader");
-    Shader shader3 = Shader("res/shaders/shader3.shader");
-    Shader shader4 = Shader("res/shaders/shader4.shader");
+    Shader uvShader = Shader("res/shaders/uv.shader");
+    Shader fixedColorShader = Shader("res/shaders/fixedColor.shader");
+    Shader variableColorShader = Shader("res/shaders/variableColor.shader");
+    Shader blinkingShader = Shader("res/shaders/blinking.shader");
 
     Texture t = Texture("res/textures/flower.png");
     t.Bind();
@@ -93,27 +93,30 @@ int main() {
     float increment = 0.05f;
     float alphaProgram4 = 0;
 
-    Shader currentShader = textureShader;
+    Shader currentShader = uvShader;
     while (!glfwWindowShouldClose(window)) {
         renderer.Clear();
 
         if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) {
-            currentShader = shader1;
+            currentShader = uvShader;
             isProg4 = false;
         } else if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) {
-            currentShader = shader2;
+            currentShader = fixedColorShader;
             isProg4 = false;
-        } else if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS) {
-            currentShader = shader3;
+        }
+        else if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS) {
+            currentShader = variableColorShader;
             isProg4 = false;
-        } else if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS) {
-            currentShader = shader4;
+        }
+        else if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS) {
+            currentShader = blinkingShader;
             isProg4 = true;
         } else if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS) {
             currentShader = textureShader;
+            isProg4 = true;
         }
 
-        //todo: refactor logic
+        // //todo: refactor logic
         if (isProg4) {
             if (alphaProgram4 > 1) {
                 increment = -0.05f;
