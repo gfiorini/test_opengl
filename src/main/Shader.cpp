@@ -8,6 +8,7 @@
 #include <vector>
 
 #include "Shader.h"
+
 #include "Renderer.h"
 
 Shader::Shader(const std::string &filepath) : m_Filepath(filepath), m_RendererID(0) {
@@ -126,3 +127,8 @@ int Shader::GetUniformLocation(const std::string &name) {
 void Shader::SetUniform4v(const std::string &name, float v0, float v1, float v2, float v3) {
     glUniform4f(GetUniformLocation(name), v0, v1, v2, v3);
 }
+
+void Shader::SetUniform1i(const std::string &name, int v0) {
+    glUniform1i(GetUniformLocation(name), v0);
+}
+
