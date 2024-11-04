@@ -12,9 +12,9 @@
 #include "Shader.h"
 #include "Texture.h"
 #include "ext/matrix_clip_space.hpp"
+#include "ext/matrix_transform.hpp"
 #include "glm/glm.hpp"
-#define GLM_ENABLE_EXPERIMENTAL
-#include "gtx/transform.hpp"
+
 
 struct Position {
     float x;

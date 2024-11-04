@@ -13,6 +13,7 @@ add_subdirectory(dependencies/glew)
 add_subdirectory(dependencies/glfw)
 add_subdirectory(dependencies/glm)
 
+
 add_definitions(-DGLEW_STATIC)
 add_executable(test_opengl "src/main/Application.cpp"
         src/main/Renderer.cpp
@@ -28,8 +29,8 @@ add_executable(test_opengl "src/main/Application.cpp"
         src/main/Shader.cpp
         src/main/Shader.h
         src/main/Asserts.h
-        src/main/stb_image.h
-        src/main/stb_image.cpp
+        src/vendor/stb_image.h
+        src/vendor/stb_image.cpp
         src/main/Texture.h
         src/main/Texture.cpp
 )
@@ -47,6 +48,7 @@ target_include_directories(test_opengl PUBLIC dependencies/glfw/deps)
 target_include_directories(test_opengl PUBLIC dependencies/glfw/include)
 target_include_directories(test_opengl PUBLIC dependencies/glew/include)
 target_include_directories(test_opengl PUBLIC dependencies/glm/glm)
+target_include_directories(test_opengl PUBLIC src/vendor)
 
 target_link_libraries(test_opengl glfw
         libglew_static glm)
@@ -58,7 +60,8 @@ endif ()
 
 add_executable(test test/Test.cpp
         test/Test.h
-        src/main/stb_image.h
-        src/main/stb_image.cpp)
+        src/vendor/stb_image.h
+        src/vendor/stb_image.cpp)
 
 target_include_directories(test PUBLIC src/main)
+target_include_directories(test PUBLIC src/vendor)
