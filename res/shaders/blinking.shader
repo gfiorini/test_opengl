@@ -8,8 +8,10 @@ layout(location = 2) in vec3 color;
 out vec2 v_UvCoord;
 out vec3 v_Color;
 
+uniform mat4 u_MVP;
+
 void main() {
-    gl_Position = vec4(position, 0, 1.0);
+    gl_Position = u_MVP * vec4(position, 0, 1);
     v_UvCoord = uvCoord;
     v_Color = color;
 }

@@ -1,8 +1,8 @@
-﻿#include <GL/glew.h>
+﻿#include <complex>
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include <fstream>
-#include <vector>
 
 #include "IndexBuffer.h"
 #include "Renderer.h"
@@ -11,9 +11,10 @@
 #include "VertexBufferLayout.h"
 #include "Shader.h"
 #include "Texture.h"
+#include "ext/matrix_clip_space.hpp"
 #include "glm/glm.hpp"
-#include "glm/gtc/matrix_inverse.hpp"
-
+#define GLM_ENABLE_EXPERIMENTAL
+#include "gtx/transform.hpp"
 
 struct Position {
     float x;
@@ -25,6 +26,7 @@ struct Color {
     float g;
     float b;
 };
+
 struct UV {
     float u;
     float v;
@@ -37,8 +39,6 @@ struct Vertex {
 };
 
 int main() {
-
-
     GLFWwindow *window;
 
     /* Initialize the library */
@@ -50,7 +50,12 @@ int main() {
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(1920, 1080, "Hello World", NULL, NULL);
+    int width = 1920;
+    int height = 1080;
+    float ratio = (float) width / (float) height;
+    float inverseZoom = 1.0f;
+
+    window = glfwCreateWindow(width, height, "Hello World", NULL, NULL);
     if (!window) {
         glfwTerminate();
         return -1;
@@ -68,17 +73,15 @@ int main() {
     fprintf(stdout, "OpenGl Version / Driver version: %s\n", glGetString(GL_VERSION));
 
     Vertex vertices[] = {
-        {{-0.5,-0.5}, {0,0},{0,0,1} },
-        {{0.5,-0.5}, {1,0}, {1,0,0} },
-        {{0.5,0.5}, {1,1} , {1,1,1},},
-        {{-0.5,0.5}, {0,1}, {0,1,1}},
+        {{-0, 0}, {0, 0}, {0, 0, 1}},
+        {{100, -0}, {1, 0}, {1, 0, 0}},
+        {{100, 100}, {1, 1}, {1, 1, 1},},
+        {{0, 100}, {0, 1}, {0, 1, 1}},
     };
 
-
-
     unsigned int vertexIndices[]{
-            0, 1, 2, // first triangle
-            0, 2, 3 // second triangle
+        0, 1, 2, // first triangle
+        0, 2, 3 // second triangle
     };
 
     Renderer renderer;
@@ -96,10 +99,27 @@ int main() {
 
     IndexBuffer ibo = {vertexIndices, 6};
 
+    glm::mat4 proj = glm::ortho(0.0f, static_cast<float>(width), 0.0f, static_cast<float>(height), -1.0f, 1.0f);
+    glm::mat4 view = translate(glm::mat4(1.0f), glm::vec3(0, 0.0f, 0.0f));
+    glm::mat4 model = glm::mat4(1.0f);
+
+    glm::mat4 mvp = proj * view * model;
+
     Shader uvShader = Shader("res/shaders/uv.shader");
+    uvShader.Bind();
+    uvShader.SetUniformMat4f("u_MVP", mvp);
+
     Shader fixedColorShader = Shader("res/shaders/fixedColor.shader");
+    fixedColorShader.Bind();
+    fixedColorShader.SetUniformMat4f("u_MVP", mvp);
+
     Shader variableColorShader = Shader("res/shaders/variableColor.shader");
+    variableColorShader.Bind();
+    variableColorShader.SetUniformMat4f("u_MVP", mvp);
+
     Shader blinkingShader = Shader("res/shaders/blinking.shader");
+    blinkingShader.Bind();
+    blinkingShader.SetUniformMat4f("u_MVP", mvp);
 
     // Texture t = Texture("res/textures/flower.png");
     Texture t = Texture("res/textures/whatsapp.png");
@@ -108,6 +128,7 @@ int main() {
     Shader textureShader = Shader("res/shaders/textureShader.shader");
     textureShader.Bind();
     textureShader.SetUniform1i("u_Texture", 0);
+    textureShader.SetUniformMat4f("u_MVP", mvp);
     textureShader.Unbind();
 
     //v-sync ON
