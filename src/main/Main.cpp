@@ -14,8 +14,9 @@
 #include "ext/matrix_clip_space.hpp"
 #include "ext/matrix_transform.hpp"
 #include "glm/glm.hpp"
-#include "imgui.h"
-#include "imgui_impl_glfw_gl3.h"
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_glfw.h"
+#include "imgui/imgui_impl_opengl3.h"
 #include "gtc/type_ptr.hpp"
 
 struct Position {
@@ -114,7 +115,6 @@ int main() {
     Shader blinkingShader = Shader("res/shaders/blinking.shader");
     blinkingShader.Bind();
 
-    // Texture t = Texture("res/textures/flower.png");
     Texture t = Texture("res/textures/whatsapp.png");
     t.Bind();
 
@@ -132,7 +132,9 @@ int main() {
 
     ImGui::CreateContext();
     ImGui::StyleColorsDark();
-    ImGui_ImplGlfwGL3_Init(window, true, "#version 330");
+    const char* glsl_version = "#version 330";  // Set GLSL version
+    ImGui_ImplOpenGL3_Init(glsl_version);
+    ImGui_ImplGlfw_InitForOpenGL(window, true);  // Initialize ImGui OpenGL3 backend
 
     Shader *currentShader = &uvShader;
 
@@ -145,7 +147,10 @@ int main() {
     while (!glfwWindowShouldClose(window)) {
         renderer.Clear();
 
-        ImGui_ImplGlfwGL3_NewFrame();
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+
         model = translate(glm::mat4(1.0f), translateVector);
         mvp = proj * view * model;
 
@@ -181,7 +186,6 @@ int main() {
         }
 
         renderer.Draw(va, ibo, *currentShader);
-
         {
             ImGui::SliderFloat("horizontal", &translateVector.x, 0.0f, width - 100.f);
             ImGui::SliderFloat("vertical", &translateVector.y, 0.0f, height - 100.f);
@@ -192,17 +196,20 @@ int main() {
         }
 
         ImGui::Render();
-        ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
+        int display_w, display_h;
+        glfwGetFramebufferSize(window, &display_w, &display_h);
+        glViewport(0, 0, display_w, display_h);
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
 
-    ImGui_ImplGlfwGL3_Shutdown();
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
 
     glfwDestroyWindow(window);
-
     glfwTerminate();
 
     return 0;

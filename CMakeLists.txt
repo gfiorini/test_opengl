@@ -16,6 +16,23 @@ add_subdirectory(dependencies/glm)
 
 add_definitions(-DGLEW_STATIC)
 add_executable(test_opengl "src/main/Main.cpp"
+        src/vendor/stb_image/stb_image.h
+        src/vendor/stb_image/stb_image.cpp
+        src/vendor/imgui/imgui_impl_glfw.cpp
+        src/vendor/imgui/imgui_impl_glfw.h
+        src/vendor/imgui/imgui_impl_opengl3.cpp
+        src/vendor/imgui/imgui_impl_opengl3.h
+        src/vendor/imgui/imgui_tables.cpp
+        src/vendor/imgui/imgui_widgets.cpp
+        src/vendor/imgui/imstb_rectpack.h
+        src/vendor/imgui/imstb_textedit.h
+        src/vendor/imgui/imstb_truetype.h
+        src/vendor/imgui/imconfig.h
+        src/vendor/imgui/imgui.cpp
+        src/vendor/imgui/imgui.h
+        src/vendor/imgui/imgui_demo.cpp
+        src/vendor/imgui/imgui_draw.cpp
+        src/vendor/imgui/imgui_internal.h
         src/main/Renderer.cpp
         src/main/Renderer.h
         src/main/VertexBuffer.cpp
@@ -29,21 +46,8 @@ add_executable(test_opengl "src/main/Main.cpp"
         src/main/Shader.cpp
         src/main/Shader.h
         src/main/Asserts.h
-        src/vendor/stb_image/stb_image.h
-        src/vendor/stb_image/stb_image.cpp
         src/main/Texture.h
         src/main/Texture.cpp
-        src/vendor/imgui/imconfig.h
-        src/vendor/imgui/imgui.cpp
-        src/vendor/imgui/imgui.h
-        src/vendor/imgui/imgui_demo.cpp
-        src/vendor/imgui/imgui_draw.cpp
-        src/vendor/imgui/imgui_internal.h
-        src/vendor/imgui/stb_rect_pack.h
-        src/vendor/imgui/stb_textedit.h
-        src/vendor/imgui/stb_truetype.h
-        src/vendor/imgui/imgui_impl_glfw_gl3.cpp
-        src/vendor/imgui/imgui_impl_glfw_gl3.h
 )
 
 set(RESOURCE_DIR "${CMAKE_SOURCE_DIR}/res")
@@ -59,8 +63,7 @@ target_include_directories(test_opengl PUBLIC dependencies/glfw/deps)
 target_include_directories(test_opengl PUBLIC dependencies/glfw/include)
 target_include_directories(test_opengl PUBLIC dependencies/glew/include)
 target_include_directories(test_opengl PUBLIC dependencies/glm/glm)
-target_include_directories(test_opengl PUBLIC src/vendor/stb_image)
-target_include_directories(test_opengl PUBLIC src/vendor/imgui)
+target_include_directories(test_opengl PUBLIC src/vendor)
 
 target_link_libraries(test_opengl glfw
         libglew_static glm)
