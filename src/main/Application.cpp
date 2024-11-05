@@ -14,6 +14,8 @@
 #include "ext/matrix_clip_space.hpp"
 #include "ext/matrix_transform.hpp"
 #include "glm/glm.hpp"
+#include "imgui.h"
+#include "imgui_impl_glfw_gl3.h"
 
 
 struct Position {
@@ -73,18 +75,22 @@ int main() {
     fprintf(stdout, "OpenGl Version / Driver version: %s\n", glGetString(GL_VERSION));
 
     Vertex vertices[] = {
-        {{-0, 0}, {0, 0}, {0, 0, 1}},
-        {{100, -0}, {1, 0}, {1, 0, 0}},
-        {{100, 100}, {1, 1}, {1, 1, 1},},
-        {{0, 100}, {0, 1}, {0, 1, 1}},
+            {{-0,  0},   {0, 0}, {0, 0, 1}},
+            {{100, -0},  {1, 0}, {1, 0, 0}},
+            {{100, 100}, {1, 1}, {1, 1, 1},},
+            {{0,   100}, {0, 1}, {0, 1, 1}},
     };
 
     unsigned int vertexIndices[]{
-        0, 1, 2, // first triangle
-        0, 2, 3 // second triangle
+            0, 1, 2, // first triangle
+            0, 2, 3 // second triangle
     };
 
     Renderer renderer;
+
+    ImGui::CreateContext();
+    ImGui_ImplGlfwGL3_Init(window, true);
+
     renderer.EnableBlending();
     renderer.EnableDebug();
 
@@ -138,9 +144,12 @@ int main() {
     float increment = 0.05f;
     float alphaProgram4 = 0;
 
+
     Shader currentShader = uvShader;
     while (!glfwWindowShouldClose(window)) {
         renderer.Clear();
+
+        ImGui_ImplGlfwGL3_NewFrame();
 
         if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) {
             currentShader = uvShader;
@@ -172,9 +181,21 @@ int main() {
         }
 
         renderer.Draw(va, ibo, currentShader);
+
+        ImGui::Text("Hello, world %d", 123);
+        ImGui::Text("Hello, world 2 %d", 256);
+
+
+
+        ImGui::Render();
+        ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
+
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
+
+    ImGui_ImplGlfwGL3_Shutdown();
+    ImGui::DestroyContext();
 
     glfwDestroyWindow(window);
 
