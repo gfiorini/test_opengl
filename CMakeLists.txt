@@ -15,7 +15,7 @@ add_subdirectory(dependencies/glm)
 
 
 add_definitions(-DGLEW_STATIC)
-add_executable(test_opengl "src/main/Application.cpp"
+add_executable(test_opengl "src/main/Main.cpp"
         src/main/Renderer.cpp
         src/main/Renderer.h
         src/main/VertexBuffer.cpp
