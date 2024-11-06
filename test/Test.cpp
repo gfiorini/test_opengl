@@ -7,7 +7,7 @@
 #include <cstring>
 #include <iostream>
 #include <ostream>
-#include "stb_image.h"
+#include "stb_image/stb_image.h"
 
 
 

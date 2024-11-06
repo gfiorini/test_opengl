@@ -64,7 +64,7 @@ target_include_directories(test_opengl PUBLIC dependencies/glew/include)
 target_include_directories(test_opengl PUBLIC dependencies/glm/glm)
 target_include_directories(test_opengl PUBLIC dependencies/imgui)
 target_include_directories(test_opengl PUBLIC dependencies/)
-target_include_directories(test_opengl PUBLIC src/vendor)
+
 
 target_link_libraries(test_opengl glfw
         libglew_static glm)
@@ -74,10 +74,11 @@ if (CMAKE_VERSION VERSION_GREATER 3.12)
 endif ()
 
 
-#add_executable(test test/Test.cpp
-#        test/Test.h
-#        src/vendor/stb_image/stb_image.h
-#        src/vendor/stb_image/stb_image.cpp)
-#
-#target_include_directories(test PUBLIC src/main)
-#target_include_directories(test PUBLIC src/vendor/stb_image)
+add_executable(test test/Test.cpp
+        dependencies/stb_image/stb_image.h
+        dependencies/stb_image/stb_image.cpp
+        test/Test.h
+        test/Test.cpp)
+
+target_include_directories(test PUBLIC src/main)
+target_include_directories(test PUBLIC dependencies)
