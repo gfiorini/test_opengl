@@ -1,8 +1,12 @@
 Build instructions:
 
-after cloning project must be initialized git submodules:
+clone with:
 
-git submodule update --init --recursive
+    git clone https://github.com/gfiorini/test_opengl.git
+
+then update submodules with:
+
+    git submodule update --init --recursive
 
 the project use cmake as build system
 
@@ -19,16 +23,11 @@ On Windows build with your preferred IDE/toolchain and you're done (tested with 
 
 ----------------------------------------------------------------------------------------------------------------
 
-
-
-
-submodule glew and glfw first initalization was made with:
+submodule glew, glfw, glm, imgui first initalization was made with:
 
 mkdir dependencies
 cd dependencies
 git submodule add https://github.com/Perlmint/glew-cmake.git glew
-cd glew
-git submodule set-branch -b glew-cmake-release .
 cd ..
 git submodule add https://github.com/glfw/glfw.git 
 git checkout 3.4
