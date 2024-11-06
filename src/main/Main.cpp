@@ -3,7 +3,6 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include <fstream>
-
 #include "IndexBuffer.h"
 #include "Renderer.h"
 #include "VertexArray.h"
@@ -15,8 +14,8 @@
 #include "ext/matrix_transform.hpp"
 #include "glm/glm.hpp"
 #include "imgui/imgui.h"
-#include "imgui/imgui_impl_glfw.h"
-#include "imgui/imgui_impl_opengl3.h"
+#include "imgui/backends/imgui_impl_glfw.h"
+#include "imgui/backends/imgui_impl_opengl3.h"
 #include "gtc/type_ptr.hpp"
 
 struct Position {

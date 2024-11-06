@@ -16,23 +16,22 @@ add_subdirectory(dependencies/glm)
 
 add_definitions(-DGLEW_STATIC)
 add_executable(test_opengl "src/main/Main.cpp"
-        src/vendor/stb_image/stb_image.h
-        src/vendor/stb_image/stb_image.cpp
-        src/vendor/imgui/imgui_impl_glfw.cpp
-        src/vendor/imgui/imgui_impl_glfw.h
-        src/vendor/imgui/imgui_impl_opengl3.cpp
-        src/vendor/imgui/imgui_impl_opengl3.h
-        src/vendor/imgui/imgui_tables.cpp
-        src/vendor/imgui/imgui_widgets.cpp
-        src/vendor/imgui/imstb_rectpack.h
-        src/vendor/imgui/imstb_textedit.h
-        src/vendor/imgui/imstb_truetype.h
-        src/vendor/imgui/imconfig.h
-        src/vendor/imgui/imgui.cpp
-        src/vendor/imgui/imgui.h
-        src/vendor/imgui/imgui_demo.cpp
-        src/vendor/imgui/imgui_draw.cpp
-        src/vendor/imgui/imgui_internal.h
+        dependencies/stb_image/stb_image.h
+        dependencies/stb_image/stb_image.cpp
+        dependencies/imgui/backends/imgui_impl_glfw.cpp
+        dependencies/imgui/backends/imgui_impl_glfw.h
+        dependencies/imgui/backends/imgui_impl_opengl3.cpp
+        dependencies/imgui/backends/imgui_impl_opengl3.h
+        dependencies/imgui/imgui_tables.cpp
+        dependencies/imgui/imgui_widgets.cpp
+        dependencies/imgui/imstb_rectpack.h
+        dependencies/imgui/imstb_textedit.h
+        dependencies/imgui/imstb_truetype.h
+        dependencies/imgui/imgui.cpp
+        dependencies/imgui/imgui_draw.cpp
+        dependencies/imgui/imgui_internal.h
+        dependencies/imgui/imconfig.h
+        dependencies/imgui/imgui.h
         src/main/Renderer.cpp
         src/main/Renderer.h
         src/main/VertexBuffer.cpp
@@ -63,6 +62,8 @@ target_include_directories(test_opengl PUBLIC dependencies/glfw/deps)
 target_include_directories(test_opengl PUBLIC dependencies/glfw/include)
 target_include_directories(test_opengl PUBLIC dependencies/glew/include)
 target_include_directories(test_opengl PUBLIC dependencies/glm/glm)
+target_include_directories(test_opengl PUBLIC dependencies/imgui)
+target_include_directories(test_opengl PUBLIC dependencies/)
 target_include_directories(test_opengl PUBLIC src/vendor)
 
 target_link_libraries(test_opengl glfw
@@ -73,10 +74,10 @@ if (CMAKE_VERSION VERSION_GREATER 3.12)
 endif ()
 
 
-add_executable(test test/Test.cpp
-        test/Test.h
-        src/vendor/stb_image/stb_image.h
-        src/vendor/stb_image/stb_image.cpp)
-
-target_include_directories(test PUBLIC src/main)
-target_include_directories(test PUBLIC src/vendor/stb_image)
+#add_executable(test test/Test.cpp
+#        test/Test.h
+#        src/vendor/stb_image/stb_image.h
+#        src/vendor/stb_image/stb_image.cpp)
+#
+#target_include_directories(test PUBLIC src/main)
+#target_include_directories(test PUBLIC src/vendor/stb_image)
