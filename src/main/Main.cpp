@@ -131,15 +131,16 @@ int main() {
 
     ImGui::CreateContext();
     ImGui::StyleColorsDark();
-    const char* glsl_version = "#version 330";  // Set GLSL version
+    const char *glsl_version = "#version 330"; // Set GLSL version
     ImGui_ImplOpenGL3_Init(glsl_version);
-    ImGui_ImplGlfw_InitForOpenGL(window, true);  // Initialize ImGui OpenGL3 backend
+    ImGui_ImplGlfw_InitForOpenGL(window, true); // Initialize ImGui OpenGL3 backend
 
     Shader *currentShader = &uvShader;
 
     glm::mat4 proj = glm::ortho(0.0f, static_cast<float>(width), 0.0f, static_cast<float>(height), -1.0f, 1.0f);
     glm::mat4 view = glm::mat4(1.0f);
-    glm::vec3 translateVector(0.f, 0.f, 0.0f);
+    glm::vec3 firstTranslateVector(0.f, 0.f, 0.0f);
+    glm::vec3 secondTranslateVector(0.f, 0.f, 0.0f);
     glm::mat4 model;
     glm::mat4 mvp;
 
@@ -149,11 +150,6 @@ int main() {
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
-
-        model = translate(glm::mat4(1.0f), translateVector);
-        mvp = proj * view * model;
-
-        currentShader->SetUniformMat4f("u_MVP", mvp);
 
         if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) {
             currentShader = &uvShader;
@@ -184,11 +180,20 @@ int main() {
             currentShader->SetUniform4v("u_Color", 0.0f, 0.5f, 0.2f, alphaProgram4);
         }
 
+        model = translate(glm::mat4(1.0f), firstTranslateVector);
+        mvp = proj * view * model;
+        currentShader->SetUniformMat4f("u_MVP", mvp);
         renderer.Draw(va, ibo, *currentShader);
-        {
-            ImGui::SliderFloat("horizontal", &translateVector.x, 0.0f, width - 100.f);
-            ImGui::SliderFloat("vertical", &translateVector.y, 0.0f, height - 100.f);
-            ImGui::SliderFloat("z-depth", &translateVector.z, -1.1f, 1.1f);
+
+        model = translate(glm::mat4(1.0f), secondTranslateVector);
+        mvp = proj * view * model;
+        currentShader->SetUniformMat4f("u_MVP", mvp);
+        renderer.Draw(va, ibo, *currentShader); {
+            ImGui::SliderFloat("1) horizontal", &firstTranslateVector.x, 0.0f, width - 100.f);
+            ImGui::SliderFloat("1) vertical", &firstTranslateVector.y, 0.0f, height - 100.f);
+
+            ImGui::SliderFloat("2) horizontal", &secondTranslateVector.x, 0.0f, width - 100.f);
+            ImGui::SliderFloat("2) vertical", &secondTranslateVector.y, 0.0f, height - 100.f);
 
             ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate,
                         ImGui::GetIO().Framerate);
