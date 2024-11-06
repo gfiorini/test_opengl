@@ -1,12 +1,10 @@
 Build instructions:
 
 clone with:
-
-    git clone https://github.com/gfiorini/test_opengl.git
+git clone https://github.com/gfiorini/test_opengl.git
 
 then update submodules with:
-
-    git submodule update --init --recursive
+git submodule update --init --recursive
 
 the project use cmake as build system
 
