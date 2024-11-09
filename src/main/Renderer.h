@@ -11,6 +11,18 @@ class Renderer {
     public:
         void EnableBlending();
         void EnableDebug();
-        void Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader);
+        void Draw(const VertexArray& va, const IndexBuffer& ib, Shader& shader);
         void Clear();
+        Renderer(int winWidth, int winHeigth);
+private:
+    int m_WinWidth, m_WinHeigth;
+
+    public:
+        [[nodiscard]] int GetWinWidth() const {
+            return m_WinWidth;
+        }
+
+        [[nodiscard]] int GetWinHeigth() const {
+            return m_WinHeigth;
+        }
 };

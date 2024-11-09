@@ -47,6 +47,13 @@ add_executable(test_opengl "src/main/Main.cpp"
         src/main/Asserts.h
         src/main/Texture.h
         src/main/Texture.cpp
+        src/main/Types.h
+        src/main/model.h
+        src/test/ClearColorTest.cpp
+        src/test/QuadTest.cpp
+        src/test/QuadTest.h
+        src/test/BlinkingTest.cpp
+        src/test/BlinkingTest.h
 )
 
 set(RESOURCE_DIR "${CMAKE_SOURCE_DIR}/res")
@@ -64,15 +71,14 @@ target_include_directories(test_opengl PUBLIC dependencies/glew/include)
 target_include_directories(test_opengl PUBLIC dependencies/glm/glm)
 target_include_directories(test_opengl PUBLIC dependencies/imgui)
 target_include_directories(test_opengl PUBLIC dependencies/)
+target_include_directories(test_opengl PUBLIC src/test)
+target_include_directories(test_opengl PUBLIC src/main)
 
-
-target_link_libraries(test_opengl glfw
-        libglew_static glm)
+target_link_libraries(test_opengl glfw libglew_static glm)
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
     set_property(TARGET test_opengl PROPERTY CXX_STANDARD 20)
 endif ()
-
 
 add_executable(test test/Test.cpp
         dependencies/stb_image/stb_image.h

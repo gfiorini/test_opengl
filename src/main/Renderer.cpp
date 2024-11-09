@@ -7,7 +7,7 @@
 
 void GLAPIENTRY openglDebugCallback(GLenum source, GLenum type, GLuint id,
                                     GLenum severity, GLsizei length,
-                                    const GLchar* message, const void* userParam) {
+                                    const GLchar *message, const void *userParam) {
     std::cerr << "OpenGL Debug Message:\n";
     std::cerr << "Source: " << source << "\n";
     std::cerr << "Type: " << type << "\n";
@@ -20,6 +20,10 @@ void Renderer::Clear() {
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
+Renderer::Renderer(int winWidth, int winHeigth) {
+    m_WinWidth = winWidth;
+    m_WinHeigth = winHeigth;
+}
 
 void Renderer::EnableBlending() {
     glEnable(GL_BLEND); // Enable blending
@@ -32,7 +36,7 @@ void Renderer::EnableDebug() {
     glDebugMessageCallback(openglDebugCallback, nullptr);
 }
 
-void Renderer::Draw(const VertexArray &va, const IndexBuffer &ib, const Shader &shader) {
+void Renderer::Draw(const VertexArray &va, const IndexBuffer &ib, Shader &shader) {
     va.Bind();
     ib.Bind();
     shader.Bind();

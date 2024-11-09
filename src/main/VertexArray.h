@@ -9,6 +9,7 @@
 
 class VertexArray {
 public:
+    // VertexArray(const VertexArray& cc);
     VertexArray();
     ~VertexArray();
     void Bind() const;

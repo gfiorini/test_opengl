@@ -18,6 +18,7 @@ Shader::Shader(const std::string &filepath) : m_Filepath(filepath), m_RendererID
 }
 
 Shader::~Shader() {
+    std::cout << "Shader destroyed: "  << m_RendererID <<  std::endl;
     glDeleteProgram(m_RendererID);
 }
 

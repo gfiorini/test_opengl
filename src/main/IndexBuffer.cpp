@@ -3,9 +3,15 @@
 //
 #include "IndexBuffer.h"
 #include <cassert>
+#include <iostream>
 #include <GL/glew.h>
 
+// IndexBuffer::IndexBuffer(const IndexBuffer &cc) {
+//     std::cout << "Copy constructor IndexBuffer" << std::endl;
+// }
+
 IndexBuffer::IndexBuffer(const unsigned int *data, unsigned int count) : m_Count(count) {
+    std::cout << "Creating IndexBuffer" << std::endl;
     assert(sizeof(unsigned int) == sizeof(GLuint));
     m_Count = count;
     glGenBuffers(1, &m_RendererID);
@@ -14,6 +20,7 @@ IndexBuffer::IndexBuffer(const unsigned int *data, unsigned int count) : m_Count
 }
 
 IndexBuffer::~IndexBuffer() {
+    std::cout << "Destroying IndexBuffer\n";
     glDeleteBuffers(1, &m_RendererID);
 }
 

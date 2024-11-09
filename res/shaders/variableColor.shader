@@ -19,10 +19,11 @@ void main() {
 #fragment shader
 #version 330 core
 
+uniform vec4 u_Color;
 in vec2 v_UvCoord;
 in vec3 v_Color;
 out vec4 color;
 
 void main() {
-    color = vec4(v_Color, 1);
+    color = u_Color;
 }

@@ -6,11 +6,17 @@
 
 #include <GL/glew.h>
 
+// VertexArray::VertexArray(const VertexArray &cc) {
+//     std::cout << "Copy constructor VertexArray\n";
+// }
+
 VertexArray::VertexArray() {
+    std::cout << "Creating VertexArray\n";
     glGenVertexArrays(1, &m_RendererID);
 }
 
 VertexArray::~VertexArray() {
+    std::cout << "Destroying VertexArray\n";
     glDeleteVertexArrays(1, &m_RendererID);
 }
 
