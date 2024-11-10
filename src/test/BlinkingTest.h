@@ -8,6 +8,7 @@
 
 #include "Renderer.h"
 #include "Types.h"
+#include "vec3.hpp"
 
 namespace Test {
     class BlinkingTest : public BaseTest {
@@ -18,14 +19,11 @@ namespace Test {
         void OnUpdate(double deltaTime) override;
         void OnRender() override;
         void OnImGuiRender() override;
-        void OnResize(int width, int height) override;
+
     private:
         types::Buffer m_BufferModel;
-        Renderer& m_Renderer;
         std::unique_ptr<Shader> m_Shader;
-        int m_Width;
-        int m_Height;
-        glm::vec3 m_translateVector;
+        glm::vec3 m_translateVector = glm::vec3(0.0f, 0.0f, 0.0f);
         float m_Color[3];
         float m_Alpha;
         float m_BlinkSpeed;

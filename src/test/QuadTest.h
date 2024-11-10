@@ -17,13 +17,10 @@ namespace Test {
         void OnUpdate(double deltaTime) override;
         void OnRender() override;
         void OnImGuiRender() override;
-        void OnResize(int width, int height) override;
+
     private:
         types::Buffer m_BufferModel;
-        Renderer& m_Renderer;
         std::unique_ptr<Shader> m_Shader;
-        int m_Width;
-        int m_Height;
     };
 }
 

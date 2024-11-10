@@ -9,7 +9,7 @@
 #include "imgui.h"
 
 namespace Test {
-    ClearColorTest::ClearColorTest() : m_clearColor{1.0, 1.0, 0.0, 1.0} {
+    ClearColorTest::ClearColorTest(Renderer &renderer) : m_clearColor{1.0, 1.0, 0.0, 1.0} , BaseTest(renderer){
 
     }
 
@@ -29,8 +29,7 @@ namespace Test {
         ImGui::ColorEdit4("Clear Color", m_clearColor);
     }
 
-    void ClearColorTest::OnResize(int width, int height) {
-        const auto aspectRatio = static_cast<float>(width) / static_cast<float>(height);
-        std::cout << "Aspect ratio: " << aspectRatio << std::endl;
-    }
+
+
+
 }

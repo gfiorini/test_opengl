@@ -54,6 +54,7 @@ add_executable(test_opengl "src/main/Main.cpp"
         src/test/QuadTest.h
         src/test/BlinkingTest.cpp
         src/test/BlinkingTest.h
+        src/test/TestMenu.cpp
 )
 
 set(RESOURCE_DIR "${CMAKE_SOURCE_DIR}/res")
@@ -80,11 +81,13 @@ if (CMAKE_VERSION VERSION_GREATER 3.12)
     set_property(TARGET test_opengl PROPERTY CXX_STANDARD 20)
 endif ()
 
-add_executable(test test/Test.cpp
+add_executable(test test/TestMain.cpp
         dependencies/stb_image/stb_image.h
         dependencies/stb_image/stb_image.cpp
-        test/Test.h
-        test/Test.cpp)
+        test/TestMain.cpp
+        test/tests/Test1.cpp
+        test/Tests.h
+        test/tests/TestLambda.cpp)
 
 target_include_directories(test PUBLIC src/main)
 target_include_directories(test PUBLIC dependencies)

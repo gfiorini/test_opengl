@@ -12,9 +12,7 @@
 
 namespace Test {
 
-    BlinkingTest::BlinkingTest(Renderer &renderer) : m_Renderer(renderer), m_Color{1,1,1}, m_Alpha(1.0f), m_BlinkSpeed(0), m_Sign(1) {
-        m_Width = m_Renderer.GetWinWidth();
-        m_Height = m_Renderer.GetWinHeigth();
+    BlinkingTest::BlinkingTest(Renderer &renderer) : BaseTest(renderer), m_Color{1,1,1}, m_Alpha(1.0f), m_BlinkSpeed(0), m_Sign(1) {
         m_Shader = std::make_unique<Shader>("res/shaders/variableColor.shader");
         m_BufferModel = loadQuad();
     }
@@ -55,8 +53,5 @@ namespace Test {
                 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
     }
 
-    void BlinkingTest::OnResize(int width, int height) {
-        m_Width = width;
-        m_Height = height;
-    }
+
 }

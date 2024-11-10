@@ -15,14 +15,15 @@
 #include "BaseTest.h"
 #include "BlinkingTest.h"
 
+Test::BaseTest *currentTest;
 
-std::shared_ptr<Test::BaseTest> currentTest;
-
-void window_size_callback(GLFWwindow* window, int width, int height){
+void window_size_callback(GLFWwindow *window, int width, int height) {
     if (currentTest != nullptr) {
         currentTest->OnResize(width, height);
     }
 }
+
+
 
 int main() {
     GLFWwindow *window;
@@ -63,15 +64,15 @@ int main() {
     renderer.EnableBlending();
     renderer.EnableDebug();
 
-    const auto quadTest = std::make_shared<Test::QuadTest>(renderer);
-    auto blinkingTest = std::make_shared<Test::BlinkingTest>(renderer);
-    auto c = std::make_shared<Test::ClearColorTest>();
+    currentTest = nullptr;
+    auto *testMenu = new Test::TestMenu(currentTest, renderer);
 
-    currentTest = blinkingTest;
+    testMenu->registerTest<Test::QuadTest>("Quad", renderer);
+    testMenu->registerTest<Test::BlinkingTest>("Blink", renderer);
+    testMenu->registerTest<Test::ClearColorTest>("Clear Color", renderer);
 
     double lastUpdate = glfwGetTime();
     while (!glfwWindowShouldClose(window)) {
-
         double currentTime = glfwGetTime();
         double deltaTime = currentTime - lastUpdate;
         lastUpdate = currentTime;
@@ -82,9 +83,19 @@ int main() {
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        currentTest->OnRender();
-        currentTest->OnImGuiRender();
-        currentTest->OnUpdate(deltaTime);
+        if (currentTest) {
+            ImGui::Begin("Tests");
+            if (currentTest != testMenu && ImGui::Button("<- Back to menu")) {
+                delete currentTest;
+                currentTest = testMenu;
+            }
+
+            currentTest->OnRender();
+            currentTest->OnImGuiRender();
+            currentTest->OnUpdate(deltaTime);
+
+            ImGui::End();
+        }
 
         ImGui::Render();
         int display_w, display_h;
