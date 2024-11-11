@@ -40,7 +40,7 @@ namespace Test {
         auto mvp = proj * view; // m = 1
         m_Shader->SetUniformMat4f("u_MVP", mvp);
         m_Shader->SetUniform4v("u_Color", m_Color[0], m_Color[1], m_Color[2], m_Alpha);
-        m_Renderer.Draw(*m_BufferModel.va, *m_BufferModel.ibo, *m_Shader);
+        m_Renderer.DrawTriangles(*m_BufferModel.va, *m_BufferModel.ibo, *m_Shader);
     }
 
     void BlinkingTest::OnImGuiRender() {

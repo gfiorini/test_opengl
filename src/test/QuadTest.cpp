@@ -32,7 +32,7 @@ namespace Test {
         m_Shader->Bind();
         auto mvp = glm::ortho(0.0f, static_cast<float>(m_Width), 0.0f, static_cast<float>(m_Height), -1.0f, 1.0f);
         m_Shader->SetUniformMat4f("u_MVP", mvp);
-        m_Renderer.Draw(*m_BufferModel.va, *m_BufferModel.ibo, *m_Shader);
+        m_Renderer.DrawTriangles(*m_BufferModel.va, *m_BufferModel.ibo, *m_Shader);
     }
 
 

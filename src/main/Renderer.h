@@ -11,7 +11,8 @@ class Renderer {
     public:
         void EnableBlending();
         void EnableDebug();
-        void Draw(const VertexArray& va, const IndexBuffer& ib, Shader& shader);
+        void EnableDepthBuffer();
+        void DrawTriangles(const VertexArray& va, const IndexBuffer& ib, Shader& shader);
         void Clear();
         Renderer(int winWidth, int winHeigth);
 private:

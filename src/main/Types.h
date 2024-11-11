@@ -12,6 +12,7 @@ namespace types {
     struct Position {
         float x;
         float y;
+        float z;
     };
 
     struct Color {

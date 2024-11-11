@@ -17,7 +17,7 @@ void GLAPIENTRY openglDebugCallback(GLenum source, GLenum type, GLuint id,
 }
 
 void Renderer::Clear() {
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 Renderer::Renderer(int winWidth, int winHeigth) {
@@ -36,9 +36,13 @@ void Renderer::EnableDebug() {
     glDebugMessageCallback(openglDebugCallback, nullptr);
 }
 
-void Renderer::Draw(const VertexArray &va, const IndexBuffer &ib, Shader &shader) {
+void Renderer::EnableDepthBuffer() {
+    glEnable(GL_DEPTH_TEST);
+}
+
+void Renderer::DrawTriangles(const VertexArray &va, const IndexBuffer &ib, Shader &shader) {
     va.Bind();
     ib.Bind();
     shader.Bind();
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+    glDrawElements(GL_TRIANGLES, ib.GetCount(), GL_UNSIGNED_INT, nullptr);
 }

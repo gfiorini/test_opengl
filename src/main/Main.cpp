@@ -14,6 +14,7 @@
 #include "gtc/type_ptr.hpp"
 #include "BaseTest.h"
 #include "BlinkingTest.h"
+#include "CubeTest.h"
 
 Test::BaseTest *currentTest;
 
@@ -63,6 +64,7 @@ int main() {
     Renderer renderer(width, height);
     renderer.EnableBlending();
     renderer.EnableDebug();
+    renderer.EnableDepthBuffer();
 
     currentTest = nullptr;
     auto *testMenu = new Test::TestMenu(currentTest, renderer);
@@ -70,6 +72,7 @@ int main() {
     testMenu->registerTest<Test::QuadTest>("Quad", renderer);
     testMenu->registerTest<Test::BlinkingTest>("Blink", renderer);
     testMenu->registerTest<Test::ClearColorTest>("Clear Color", renderer);
+    testMenu->registerTest<Test::CubeTest>("Cube", renderer);
 
     double lastUpdate = glfwGetTime();
     while (!glfwWindowShouldClose(window)) {
