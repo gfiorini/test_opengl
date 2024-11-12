@@ -22,7 +22,9 @@ namespace Test {
         float m_CameraSettings[3] = {35.f, 0.1f, 100.0f};
         glm::mat<4, 4, float> m_Model = glm::mat4(1.0f);
         glm::vec3 m_TranslateVector = glm::vec3(0.0f, 0.0f, 0.0f);
-        float m_RotationSpeed = 0;
+        glm::vec3 m_CameraPosition = glm::vec3(0.0f, 0.0f, 300.0f);
+        float m_FOV = 45.f;
+        float m_Rotation = 0;
         float m_RotationAngle[3] = {0,0,1};
     };
 

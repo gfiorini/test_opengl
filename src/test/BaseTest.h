@@ -19,9 +19,12 @@ namespace Test {
             m_Height = m_Renderer.GetWinHeigth();
         }
         virtual ~BaseTest() = default;
-        void virtual OnUpdate(double deltaTime){}
-        void virtual OnRender(){}
-        void virtual OnImGuiRender(){}
+
+        virtual void virtual OnUpdate(double deltaTime){}
+
+        virtual void virtual OnRender(){}
+
+        virtual void virtual OnImGuiRender(){}
         void OnResize(int width, int height) {
             const auto aspectRatio = static_cast<float>(width) / static_cast<float>(height);
             std::cout << "Aspect ratio: " << aspectRatio << std::endl;
