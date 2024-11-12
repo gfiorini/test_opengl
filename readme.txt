@@ -1,14 +1,13 @@
 Build instructions:
 
 clone with:
-git clone https://github.com/gfiorini/test_opengl.git
+git clone --recursive https://github.com/gfiorini/test_opengl.git
 
-then update submodules with:
-git submodule update --init --recursive
+
 
 the project use cmake as build system
 
-On Linux you must have installed openGL development libs:
+On debian based linux distro you must have installed openGL development libs:
 
     sudo apt install libgl1-mesa-dev
 
@@ -17,7 +16,7 @@ and to build glfw (see https://www.glfw.org/docs/latest/compile.html) you must h
     sudo apt install libwayland-dev libxkbcommon-dev xorg-dev
 
 
-On Windows build with your preferred IDE/toolchain and you're done (tested with Visual Studio and CLion)
+On Windows you must have installed visual studio (2019 or later), tested with CLion and Visula studio toolchain
 
 ----------------------------------------------------------------------------------------------------------------
 
