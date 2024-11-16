@@ -57,6 +57,8 @@ add_executable(test_opengl "src/main/Main.cpp"
         src/test/TestMenu.cpp
         src/test/CubeTest.cpp
         src/test/CubeTest.h
+        src/test/TexturedCubeTest.cpp
+        src/test/TexturedCubeTest.h
 )
 
 set(RESOURCE_DIR "${CMAKE_SOURCE_DIR}/res")

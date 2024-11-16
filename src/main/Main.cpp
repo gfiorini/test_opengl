@@ -15,6 +15,7 @@
 #include "BaseTest.h"
 #include "BlinkingTest.h"
 #include "CubeTest.h"
+#include "TexturedCubeTest.h"
 
 Test::BaseTest *currentTest;
 
@@ -71,6 +72,7 @@ int main() {
     testMenu->registerTest<Test::BlinkingTest>("Blink", renderer);
     testMenu->registerTest<Test::ClearColorTest>("Clear Color", renderer);
     testMenu->registerTest<Test::CubeTest>("Cube", renderer);
+    testMenu->registerTest<Test::TexturedCubeTest>("Texture", renderer);
 
     double lastUpdate = glfwGetTime();
     while (!glfwWindowShouldClose(window)) {

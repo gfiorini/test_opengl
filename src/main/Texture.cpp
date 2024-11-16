@@ -31,6 +31,7 @@ Texture::Texture(const std::string &path) : m_RendererID(0), m_FilePath(path.c_s
 }
 
 Texture::~Texture() {
+    std::cout << "Texture destroyed" << std::endl;
     glBindTexture(GL_TEXTURE_2D, 0);
     glDeleteTextures(1, &m_RendererID);
 }
