@@ -10,6 +10,7 @@
 #include <vector>
 
 #include "Renderer.h"
+#include "CameraController.h"
 
 namespace Test {
     class BaseTest {
@@ -17,14 +18,19 @@ namespace Test {
         BaseTest(Renderer& r) : m_Renderer(r) {
             m_Width = m_Renderer.GetWinWidth();
             m_Height = m_Renderer.GetWinHeigth();
+            m_CameraController = CameraController(m_Width, m_Height);
+
         }
         virtual ~BaseTest() = default;
 
-        virtual void virtual OnUpdate(double deltaTime){}
+        virtual void OnUpdate(double deltaTime){}
 
-        virtual void virtual OnRender(){}
+        virtual void OnRender(){}
 
-        virtual void virtual OnImGuiRender(){}
+        virtual void OnImGuiRender(){}
+
+        virtual void OnScroll(int xoffset, int yoffset){}
+
         void OnResize(int width, int height) {
             const auto aspectRatio = static_cast<float>(width) / static_cast<float>(height);
             std::cout << "Aspect ratio: " << aspectRatio << std::endl;
@@ -36,7 +42,10 @@ namespace Test {
         Renderer& m_Renderer;
         float m_Width;
         float m_Height;
+        CameraController m_CameraController;
     };
+
+
 
     class TestMenu : public BaseTest {
     public:
@@ -55,6 +64,8 @@ namespace Test {
     private:
         BaseTest*& m_CurrentTest;
         std::vector<std::pair<std::string, std::function<BaseTest*()>>> m_Tests;
+    protected:
+
         //std::vector<std::pair<std::string, std::function<BaseTest*(Renderer&)>>> v;
 
     };

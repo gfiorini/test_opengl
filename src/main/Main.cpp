@@ -25,6 +25,13 @@ void window_size_callback(GLFWwindow *window, int width, int height) {
     }
 }
 
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset){
+    std::cout << "scroll_callback, xoffset: " << xoffset << ", yoffset:" << yoffset << std::endl;
+    if (currentTest != nullptr) {
+        currentTest->OnScroll(xoffset, yoffset);
+    }
+}
+
 int main() {
     GLFWwindow *window;
 
@@ -40,7 +47,7 @@ int main() {
     int width = 1920;
     int height = 1080;
 
-    window = glfwCreateWindow(width, height, "Sgrunt", NULL, NULL);
+    window = glfwCreateWindow(width, height, "Main Window", NULL, NULL);
     if (!window) {
         glfwTerminate();
         return -1;
@@ -49,6 +56,9 @@ int main() {
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
     glfwSetWindowSizeCallback(window, window_size_callback);
+
+    glfwSetScrollCallback(window, scroll_callback);
+
     GLenum err = glewInit();
     if (GLEW_OK != err) {
         /* Problem: glewInit failed, something is seriously wrong. */
