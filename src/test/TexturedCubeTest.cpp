@@ -9,12 +9,13 @@
 #include "Texture.h"
 #include "imgui.h"
 
+
 Test::TexturedCubeTest::TexturedCubeTest(Renderer &r) : BaseTest(r) {
     m_Shader = std::make_unique<Shader>("res/shaders/textureShader.shader");
-    m_BufferModel = loadCubeTextureable();
+    m_BufferModel = loadCubeTextureable(); // loadCubeFromFBX();
 
     int textureSlot = 0;
-    m_Texture = std::make_unique<Texture>("res/textures/crate2.jpg");
+    m_Texture = std::make_unique<Texture>("res/textures/colors.png");
     m_Texture->Bind(textureSlot);
 
     m_Shader->Bind();
@@ -27,7 +28,7 @@ Test::TexturedCubeTest::TexturedCubeTest(Renderer &r) : BaseTest(r) {
     std::uniform_real_distribution<> tr(-1.0, 1.0);
     std::uniform_real_distribution<> rad(0.0, 1.0);
 
-    for (auto &m_Model: m_Models) {
+    for (auto &m_Model: m_ModelsTransform) {
         double x = tr(gen) * 600;
         double y = tr(gen) * 600;
         double z = tr(gen) * 200;
@@ -48,6 +49,11 @@ Test::TexturedCubeTest::TexturedCubeTest(Renderer &r) : BaseTest(r) {
 
 void Test::TexturedCubeTest::OnUpdate(double deltaTime) {
     BaseTest::OnUpdate(deltaTime);
+    for (auto &m_Model: m_ModelsTransform) {
+        m_Model = rotate(m_Model,
+                         glm::radians(m_Rotation),
+                         glm::vec3(m_RotationAngle[0],m_RotationAngle[1], m_RotationAngle[2]));
+    }
 }
 
 void Test::TexturedCubeTest::OnRender() {
@@ -58,10 +64,7 @@ void Test::TexturedCubeTest::OnRender() {
 }
 
 void Test::TexturedCubeTest::drawCubes() {
-    for (auto &m_Model: m_Models) {
-        m_Model = rotate(m_Model, glm::radians(m_Rotation),
-                         glm::vec3(m_RotationAngle[0], m_RotationAngle[1], m_RotationAngle[2]));
-
+    for (auto &m_Model: m_ModelsTransform) {
         glm::mat<4, 4, float> mvp = m_CameraController.getProjection() * m_CameraController.getView() * m_Model;
         m_Shader->SetUniformMat4f("u_MVP", mvp);
         m_Renderer.DrawTriangles(*m_BufferModel.va, *m_BufferModel.ibo, *m_Shader);

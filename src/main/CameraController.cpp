@@ -19,6 +19,11 @@ CameraController::CameraController(const glm::vec3 &cameraPosition, float w, flo
     this->m_CameraPosition = cameraPosition;
     this->m_Width  = w;
     this->m_Height = h;
+    this->m_View = glm::lookAt(
+            m_CameraPosition,
+            glm::vec3(0.0f, 0.0f, 0.0f),    // Look at the origin
+            glm::vec3(0.0f, 1.0f, 0.0f)     // Up vector
+    );
 }
 
 glm::vec3 &CameraController::getCameraPosition() {
@@ -30,11 +35,7 @@ float &CameraController::getFOV()  {
 }
 
 glm::mat4 CameraController::getView() {
-    return glm::lookAt(
-            m_CameraPosition,
-            glm::vec3(0.0f, 0.0f, 0.0f),    // Look at the origin
-            glm::vec3(0.0f, 1.0f, 0.0f)     // Up vector
-    );
+    return m_View;
 }
 
 

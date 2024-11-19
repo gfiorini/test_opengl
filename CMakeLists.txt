@@ -12,6 +12,7 @@ project("test_opengl")
 add_subdirectory(dependencies/glew)
 add_subdirectory(dependencies/glfw)
 add_subdirectory(dependencies/glm)
+add_subdirectory(dependencies/assimp)
 
 
 add_definitions(-DGLEW_STATIC)
@@ -61,6 +62,7 @@ add_executable(test_opengl "src/main/Main.cpp"
         src/test/TexturedCubeTest.h
         src/main/CameraController.cpp
         src/main/CameraController.h
+        src/main/model.cpp
 )
 
 set(RESOURCE_DIR "${CMAKE_SOURCE_DIR}/res")
@@ -77,11 +79,12 @@ target_include_directories(test_opengl PUBLIC dependencies/glfw/include)
 target_include_directories(test_opengl PUBLIC dependencies/glew/include)
 target_include_directories(test_opengl PUBLIC dependencies/glm/glm)
 target_include_directories(test_opengl PUBLIC dependencies/imgui)
+target_include_directories(test_opengl PUBLIC dependencies/assimp/include)
 target_include_directories(test_opengl PUBLIC dependencies/)
 target_include_directories(test_opengl PUBLIC src/test)
 target_include_directories(test_opengl PUBLIC src/main)
 
-target_link_libraries(test_opengl glfw libglew_static glm)
+target_link_libraries(test_opengl glfw libglew_static glm assimp)
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
     set_property(TARGET test_opengl PROPERTY CXX_STANDARD 20)

@@ -31,7 +31,7 @@ namespace Test {
         std::unique_ptr<Shader> m_Shader;
         std::unique_ptr<Texture> m_Texture;
         CameraController m_CameraController;
-        glm::mat<4, 4, float> m_Models[3] = {};
+        glm::mat<4, 4, float> m_ModelsTransform[10] = {};
 //        glm::vec3 m_TranslateVector = glm::vec3(0.0f, 0.0f, 0.0f);
 //        glm::vec3 m_CameraPosition = glm::vec3(0.0f, 0.0f, 300.0f);
 //        float m_FOV = 90.f;

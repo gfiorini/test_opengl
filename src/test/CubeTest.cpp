@@ -18,8 +18,8 @@ namespace Test {
     }
 
     void CubeTest::OnUpdate(double deltaTime) {
-        //m_Models = rotate(m_Models, glm::radians((float)deltaTime * m_Rotation * 10), glm::vec3(0, 1, 1));
-        //m_Models = rotate(m_Models, glm::radians((float)deltaTime * m_Rotation * 10), glm::vec3(m_RotationAngle[0], m_RotationAngle[1], m_RotationAngle[2]));
+        //m_ModelsTransform = rotate(m_ModelsTransform, glm::radians((float)deltaTime * m_Rotation * 10), glm::vec3(0, 1, 1));
+        //m_ModelsTransform = rotate(m_ModelsTransform, glm::radians((float)deltaTime * m_Rotation * 10), glm::vec3(m_RotationAngle[0], m_RotationAngle[1], m_RotationAngle[2]));
     }
 
     void CubeTest::OnRender() {
