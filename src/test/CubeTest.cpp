@@ -15,7 +15,12 @@ namespace Test {
         //todo: come riciclare shader già compilati ?
         m_Shader = std::make_unique<Shader>("res/shaders/uv.shader");
         m_BufferModel = loadCube();
+        glDisable(GL_CULL_FACE);
     }
+
+    void test() {
+
+        }
 
     void CubeTest::OnUpdate(double deltaTime) {
         //m_ModelsTransform = rotate(m_ModelsTransform, glm::radians((float)deltaTime * m_Rotation * 10), glm::vec3(0, 1, 1));
@@ -25,6 +30,7 @@ namespace Test {
     void CubeTest::OnRender() {
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
+
         m_Shader->Bind();
         //auto mvp = glm::perspective(m_Camera_Settings[0], (float)m_Width / (float)m_Height, m_Camera_Settings[1], m_Camera_Settings[2]);
         //glm::mat<4, 4, float> proj = glm::ortho(-m_Width/2, m_Width/2, -m_Height/2, m_Height/2, -150.0f, 150.0f);
